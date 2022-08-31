@@ -1,5 +1,5 @@
 {
-  "name": "discordterminal",
+  "name": "discord2terminal",
   "version": "1.0.0",
   "description": "Use Discord from the terminal!",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TheUntraceable/DiscordInTheTerminal.git"
+    "url": "git+https://github.com/TheUntraceable/Discord2Terminal.git"
   },
   "keywords": [
     "Discord",
@@ -16,14 +16,18 @@
     "DiscordTerminal",
     "DiscordRPC",
     "RPC",
-    "NotSelfBotting"
+    "NotSelfBotting",
+    "Discord2Terminal",
+    "DiscordToTerminal",
+    "Discord4Terminal",
+    "DiscordForTerminal"
   ],
   "author": "TheUntraceable",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/TheUntraceable/DiscordInTheTerminal/issues"
+    "url": "https://github.com/TheUntraceable/Discord2Terminal/issues"
   },
-  "homepage": "https://github.com/TheUntraceable/DiscordInTheTerminal#readme",
+  "homepage": "https://github.com/TheUntraceable/Discord2Terminal#readme",
   "dependencies": {
     "@theuntraceable/discord-rpc": "^4.0.4",
     "axios": "^0.27.2",
