@@ -130,4 +130,7 @@ app.post("/channels/:channelId", async (req, res) => {
 })
 
 
-client.login(config.clientToken)
+app.listen(config.port, () => {
+    console.log(chalk.green.underline(`Listening on port ${config.port}!`))
+    client.login(config.clientToken)
+})
