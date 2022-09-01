@@ -80,7 +80,7 @@ client.on("interactionCreate", async (interaction) => {
 
 client.on("ready", async () => {
     console.log(`Logged in as ${client.user.tag}!`)
-    await client.rest.put(Routes.applicationCommands(client.id), {
+    await client.rest.put(Routes.applicationCommands(client.user.id), {
         body: [
             new SlashCommandBuilder()
                 .setName("webhook")
@@ -117,8 +117,30 @@ client.on("ready", async () => {
     })
 })
 
-app.post("/channels/:channelId", async (req, res) => {
+app.ratelimits = {}
 
+const checkRatelimits = async (req, res) => {
+    if(!app.ratelimits[req.ip]) {
+        app.ratelimits[req.ip] = {
+            count: 0,
+            timeoutCanceller: setTimeout(() => {
+                delete app.ratelimits[req.ip]
+            }, 10000)
+        }
+    }
+
+    app.ratelimits[req.ip].count++
+
+    if(app.ratelimits[req.ip].count >= 5) {
+        res.status(429).send("You are being ratelimited!")
+        return false
+    }
+
+    return true
+    
+}
+
+app.post("/channels/:channelId", checkRatelimits, async (req, res) => {
     const dbEntry = await client.db.webhooks.findOne({channelId: req.params.channelId})
     
     if(!dbEntry || !dbEntry.webhooks) return res.status(404).json({
