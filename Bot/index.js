@@ -1,4 +1,5 @@
 const { Client, IntentsBitField, InteractionType, PermissionsBitField, Routes, SlashCommandBuilder } = require("discord.js")
+const chalk = require("chalk")
 const { MongoClient } = require('mongodb');
 const WebhookManager = require("./webhookClient")
 const express = require("express")
