@@ -33,8 +33,14 @@ export const data = {
         })
     
         var message = ""
+        var lastAuthor = null
         for(const cachedMessage of client.channels[String(channelNameToChannel[channel.channel].id)]) {
-            var messageBlock = chalk.hex(cachedMessage.author_color || "FFFFFF11").underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})`)
+            
+            var messageBlock;
+            if(lastAuthor != cachedMessage.author.id) {
+                messageBlock += chalk.hex(cachedMessage.author_color || "FFFFFF11").underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})`)
+                lastAuthor = cachedMessage.author.id
+            }
             messageBlock += `\n    ${chalk.hex(cachedMessage.author_color || "FFFFFF11")(cachedMessage.content)}`
             message += messageBlock
         }
