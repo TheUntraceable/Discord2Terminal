@@ -39,10 +39,9 @@ for(const file of fs.readdirSync("./commands")) {
         text: `Loaded command ${file}!`
     })
 
-commandSpinner.success({
-    text: `Loaded ${Object.keys(client.commands).length} commands!`
-})
-
+    commandSpinner.success({
+        text: `Loaded ${Object.keys(client.commands).length} commands!`
+    })
 }
 
 const eventSpinner = createSpinner("Loading events...").start()
