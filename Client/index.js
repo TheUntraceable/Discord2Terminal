@@ -77,7 +77,7 @@ client.addCommand("select", async (guildStartswith = "", channelStartswith = "")
     const channels = await client.getChannels(guild.id)
     const channelNameToChannel = {}
     for(const channel of channels) {
-        channelNameToChannel[channel.name] = channel
+        channelNameToChannel[channel.name.toLowerCase()] = channel
     }
     const channel = await inquirer.prompt({
         type: "list",
