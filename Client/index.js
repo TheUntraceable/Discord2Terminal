@@ -21,8 +21,6 @@ client.addCommand = (name, callback) => {
 marked.setOptions({
     renderer: new TerminalRenderer( )
 });
-    
-
 
 const parseCommands = async () => {
     const answer = await inquirer.prompt({
@@ -36,7 +34,7 @@ const parseCommands = async () => {
     const command = client.commands[commandName]
 
     if(!command) {
-        console.log(chalk.red.underline(`Command ${command} not found!`))
+        console.log(chalk.red.underline(`Command not found!`))
         return await parseCommands()
     }
     await command(...args).catch(error => {
@@ -46,6 +44,7 @@ const parseCommands = async () => {
 }
 
 client.on("ready", async () => {
+    let subscribed = 0
     const spinner = createSpinner("Subscribing to events to Discord...").start()
     const guilds = await client.getGuilds()
     client.guilds = guilds.guilds
@@ -53,13 +52,14 @@ client.on("ready", async () => {
 
     for(const guild of client.guilds) {
         const channels = await client.getChannels(guild.id)
-        for(const channel of channels) {
+        for(const channel of channels.filter(channel => channel.type === 0)) {
             client.channels[channel.id] = []
             client.subscribe("MESSAGE_CREATE", { channel_id: channel.id })
+            subscribed++
         }
     }
     spinner.success({
-        text: `Subscribed to MESSAGE_CREATE for ${Object.keys(client.channels).length}!`
+        text: `Subscribed to MESSAGE_CREATE for ${subscribed}/${Object.keys(client.channels).length} channels!`
     })
     await parseCommands()
 })
@@ -95,6 +95,13 @@ client.addCommand("select", async (guildString = "", channelString = "") => {
         message += messageBlock
     }
     console.log(message)
+    const watchMessages = async payload => {
+        var messageBlock = chalk.hex(cachedMessage.author_color).underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})`)
+        messageBlock += `\n    ${chalk.hex(cachedMessage.author_color)(cachedMessage.content)}`
+        console.log(messageBlock)
+    }
+    client.on("MESSAGE_CREATE", watchMessages)
+    
 })
 
 client.addCommand("cls", async () => {
@@ -103,6 +110,10 @@ client.addCommand("cls", async () => {
 
 client.addCommand("clear", async () => {
     console.clear()
+})
+
+client.addCommand("eval", async (code = "") => {
+    await eval(code)
 })
 
 client.on("MESSAGE_CREATE", async payload => {
