@@ -8,7 +8,7 @@ import chalk from "chalk"
 import fs from "fs"
 
 marked.setOptions({
-    renderer: new TerminalRenderer( )
+    renderer: new TerminalRenderer()
 });
 
 const client = new Client({
@@ -24,6 +24,7 @@ client.addCommand = (name, callback) => {
     return client
 }
 
+client.captureRejections = true
 
 const parseCommands = async () => {
     const answer = await inquirer.prompt({
@@ -47,30 +48,7 @@ const parseCommands = async () => {
     return await parseCommands()
 }
 
-client.on("ready", async () => {
-    let subscribed = 0
-    const spinner = createSpinner("Subscribing to events to Discord...").start()
-    const guilds = await client.getGuilds()
-    client.guilds = guilds.guilds
-
-    for(const guild of client.guilds) {
-        const channels = await client.getChannels(guild.id)
-        for(const channel of channels.filter(channel => channel.type == 0)) {
-            client.channels[channel.id] = []
-            await client.subscribe("MESSAGE_CREATE", { channel_id: channel.id })
-            subscribed++
-        }
-    }
-    spinner.success({
-        text: `Subscribed to MESSAGE_CREATE for ${subscribed}/${Object.keys(client.channels).length} channels!`
-    })
-    await parseCommands()
-})
-
-client.on("MESSAGE_CREATE", async payload => {
-    payload.message.content = marked(payload.message.content) 
-    client.channels[payload.channel_id].push(payload.message)
-})
+const commandSpinner = createSpinner("Loading commands...").start()
 
 client.addCommand("cls", async () => {
     console.clear()
@@ -78,6 +56,10 @@ client.addCommand("cls", async () => {
     await eval(code)
 }).addCommand("clear", async () => {
     console.clear()
+})
+
+commandSpinner.success({
+    text: `Loaded ${Object.keys(client.commands).length} commands!`
 })
 
 for(const file of fs.readdirSync("./commands")) {
@@ -88,6 +70,23 @@ for(const file of fs.readdirSync("./commands")) {
         text: `Loaded command ${file}!`
     })
 }
+
+const eventSpinner = createSpinner("Loading events...").start()
+let events = 0
+
+for(const file of fs.readdirSync("./events")) {
+    const spinner = createSpinner(`Loading event ${file}...`).start()
+    const event = await import(`./events/${file}`)
+    client.on(event.name, event.callback)
+    events++
+    spinner.success({
+        text: `Loaded event ${file}!`
+    })
+}
+
+eventSpinner.success({
+    text: `Loaded ${events} events!`
+})
 
 client.login({
     clientId: config.clientId,
