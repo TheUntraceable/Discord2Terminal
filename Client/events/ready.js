@@ -1,7 +1,7 @@
 import inquirer from "inquirer"
 import chalk from "chalk"
 
-const parseCommands = async () => {
+const parseCommands = async client => {
     const answer = await inquirer.prompt({
         type: "input",
         name: "command",
@@ -23,9 +23,11 @@ const parseCommands = async () => {
     return await parseCommands()
 }
 
-export default {
+export const data = {
     name: "ready",
     async callback(payload) {
+        const { client } = payload
+        console.log("Ready!")
         let subscribed = 0
         const spinner = createSpinner("Subscribing to events to Discord...").start()
         const guilds = await client.getGuilds()

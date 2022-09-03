@@ -1,4 +1,4 @@
-export default {
+export const data = {
     name: "select",
     callback: async (client, guildString = "", channelString = "") => {
         const guilds = {}

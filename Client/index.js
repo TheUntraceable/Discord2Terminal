@@ -38,9 +38,9 @@ for(const file of fs.readdirSync("./commands")) {
     const spinner = createSpinner(`Loading command ${file}...`).start()
     const command = await import(`./commands/${file}`)
     const callback = async (...args) => {
-        await command.callback(client, ...args)
+        await command.data.callback(client, ...args)
     }
-    client.addCommand(command.name, callback)
+    client.addCommand(command.data.name, callback)
     spinner.success({
         text: `Loaded command ${file}!`
     })
@@ -57,9 +57,11 @@ let events = 0
 for(const file of fs.readdirSync("./events")) {
     const spinner = createSpinner(`Loading event ${file}...`).start()
     const event = await import(`./events/${file}`)
-    client.on(event.name, async payload => {
+
+    client.on(event.data.name, async payload => {
         payload.client = client
-        await event.callback(payload)
+        console.log(`Emitting ${event.data.name}...`)
+        await event.data.callback(payload)
         }
     )
     events++
