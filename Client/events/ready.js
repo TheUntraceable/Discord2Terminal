@@ -1,3 +1,28 @@
+import inquirer from "inquirer"
+import chalk from "chalk"
+
+const parseCommands = async () => {
+    const answer = await inquirer.prompt({
+        type: "input",
+        name: "command",
+        message: "Enter a command"
+    })
+
+    const string = answer.command
+    const commandName = string.split(" ")[0]
+    const args = string.split(" ").filter(arg => arg !== "").splice(1, string.split(" ").length)
+    const command = client.commands[commandName]
+
+    if(!command) {
+        console.log(chalk.red.underline(`Command not found!`))
+        return await parseCommands()
+    }
+    await command(...args).catch(error => {
+        console.error(chalk.red.underline(error))
+    })
+    return await parseCommands()
+}
+
 export default {
     name: "ready",
     async callback(payload) {

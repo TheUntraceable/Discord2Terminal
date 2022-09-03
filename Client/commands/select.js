@@ -1,6 +1,6 @@
 export default {
     name: "select",
-    callback: async (guildString = "", channelString = "") => {
+    callback: async (client, guildString = "", channelString = "") => {
         const guilds = {}
         for(const guild of client.guilds) {
             guilds[guild.name] = guild
