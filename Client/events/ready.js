@@ -19,6 +19,7 @@ const parseCommands = async client => {
         return await parseCommands(client)
     }
     await command(...args).catch(error => {
+        console.log(error)
         console.error(chalk.red.underline(error))
     })
     return await parseCommands(client)

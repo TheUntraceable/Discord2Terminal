@@ -55,8 +55,7 @@ for(const file of fs.readdirSync("./events")) {
     client.on(event.data.name, async payload => {
         payload.client = client
         await event.data.callback(payload)
-        }
-    )
+    })
     events++
     spinner.success({
         text: `Loaded event ${file}!`

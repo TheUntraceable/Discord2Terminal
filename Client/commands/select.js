@@ -34,8 +34,8 @@ export const data = {
     
         var message = ""
         for(const cachedMessage of client.channels[String(channelNameToChannel[channel.channel].id)]) {
-            var messageBlock = chalk.hex(cachedMessage.author_color).underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})`)
-            messageBlock += `\n    ${chalk.hex(cachedMessage.author_color)(cachedMessage.content)}`
+            var messageBlock = chalk.hex(cachedMessage.author_color || "FFFFFF11").underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})`)
+            messageBlock += `\n    ${chalk.hex(cachedMessage.author_color || "FFFFFF11")(cachedMessage.content)}`
             message += messageBlock
         }
         console.log(message)
