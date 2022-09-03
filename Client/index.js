@@ -71,7 +71,7 @@ client.addCommand("select", async (guildStartswith = "", channelStartswith = "")
         type: "list",
         name: "guild",
         message: "Select a guild",
-        choices: Object.keys(guilds).filter(guild => guild.startsWith(guildStartswith))
+        choices: Object.keys(guilds).filter(guild => guild.name.toLowerCase().startsWith(guildStartswith.toLowerCase()))
     })
     const guild = guilds[answer.guild]
     const channels = await client.getChannels(guild.id)
@@ -83,13 +83,13 @@ client.addCommand("select", async (guildStartswith = "", channelStartswith = "")
         type: "list",
         name: "channel",
         message: "Select a channel",
-        choices: channels.filter(channel => channel.type === 0 && channel.name.startsWith(channelStartswith)).map(channel => channel.name)
+        choices: channels.filter(channel => channel.type === 0 && channel.name.toLowerCase().startsWith(channelStartswith.toLowerCase())).map(channel => channel.name)
     })
 
     var message = ""
     for(const cachedMessage of client.channels[channelNameToChannel[channel.channel].id]) {
         var messageBlock = chalk.hex(cachedMessage.author_color).underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})`)
-        messageBlock += `\n    ${chalk.hex(cachedMessage.author_color)(cachedMessage.content)}\n`
+        messageBlock += `\n    ${chalk.hex(cachedMessage.author_color)(cachedMessage.content)}`
         message += messageBlock
     }
     console.log(message)
