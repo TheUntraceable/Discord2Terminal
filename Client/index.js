@@ -1,8 +1,15 @@
 import { Client } from "@theuntraceable/discord-rpc"
+import { marked } from 'marked';
+import TerminalRenderer from 'marked-terminal';
 import config from "../config.json" assert {type: "json"}
 import inquirer from "inquirer"
 import { createSpinner } from "nanospinner"
 import chalk from "chalk"
+
+marked.setOptions({
+    renderer: new TerminalRenderer()
+});
+    
 
 const client = new Client({
     transport: "ipc"
@@ -55,7 +62,7 @@ client.addCommand = (name, callback) => {
     client.commands[name] = callback
 }
 
-client.addCommand("select", async () => {
+client.addCommand("select", async (guildStartswith = "", channelStartswith = "") => {
     const guilds = {}
     for(const guild of client.guilds) {
         guilds[guild.name] = guild
@@ -64,7 +71,7 @@ client.addCommand("select", async () => {
         type: "list",
         name: "guild",
         message: "Select a guild",
-        choices: Object.keys(guilds)
+        choices: Object.keys(guilds).filter(guild => guild.startsWith(guildStartswith))
     })
     const guild = guilds[answer.guild]
     const channels = await client.getChannels(guild.id)
@@ -76,7 +83,7 @@ client.addCommand("select", async () => {
         type: "list",
         name: "channel",
         message: "Select a channel",
-        choices: channels.filter(channel => channel.type === 0).map(channel => channel.name)
+        choices: channels.filter(channel => channel.type === 0 && channel.name.startsWith(channelStartswith)).map(channel => channel.name)
     })
 
     var message = ""
@@ -97,6 +104,7 @@ client.addCommand("clear", async () => {
 })
 
 client.on("MESSAGE_CREATE", async payload => {
+    payload.message.content = marked(payload.message.content) 
     client.channels[payload.channel_id].push(payload.message)
 })
 
