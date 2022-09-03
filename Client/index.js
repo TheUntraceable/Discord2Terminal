@@ -71,7 +71,7 @@ client.addCommand("select", async (guildStartswith = "", channelStartswith = "")
         type: "list",
         name: "guild",
         message: "Select a guild",
-        choices: Object.keys(guilds).filter(guild => guild.name.toLowerCase().startsWith(guildStartswith.toLowerCase()))
+        choices: Object.keys(guilds).filter(guild => guild.toLowerCase().startsWith(guildStartswith.toLowerCase()))
     })
     const guild = guilds[answer.guild]
     const channels = await client.getChannels(guild.id)
