@@ -10,7 +10,7 @@ import chalk from "chalk"
 const client = new Client({
     transport: "ipc"
 })
-
+client.channels = {}
 client.commands = {}
 
 
@@ -28,6 +28,7 @@ const parseCommands = async () => {
         name: "command",
         message: "Enter a command"
     })
+
     const string = answer.command
     const commandName = string.split(" ")[0]
     const args = string.split(" ").filter(arg => arg !== "").splice(1, string.split(" ").length)
@@ -48,7 +49,6 @@ client.on("ready", async () => {
     const spinner = createSpinner("Subscribing to events to Discord...").start()
     const guilds = await client.getGuilds()
     client.guilds = guilds.guilds
-    client.channels = {}
 
     for(const guild of client.guilds) {
         const channels = await client.getChannels(guild.id)
@@ -89,18 +89,12 @@ client.addCommand("select", async (guildString = "", channelString = "") => {
     })
 
     var message = ""
-    for(const cachedMessage of client.channels[channelNameToChannel[channel.channel].id]) {
+    for(const cachedMessage of client.channels[String(channelNameToChannel[channel.channel].id)]) {
         var messageBlock = chalk.hex(cachedMessage.author_color).underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})`)
         messageBlock += `\n    ${chalk.hex(cachedMessage.author_color)(cachedMessage.content)}`
         message += messageBlock
     }
     console.log(message)
-    const watchMessages = async payload => {
-        var messageBlock = chalk.hex(cachedMessage.author_color).underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})`)
-        messageBlock += `\n    ${chalk.hex(cachedMessage.author_color)(cachedMessage.content)}`
-        console.log(messageBlock)
-    }
-    client.on("MESSAGE_CREATE", watchMessages)
     
 })
 
@@ -127,4 +121,4 @@ client.login({
     clientSecret: config.clientSecret,
     scopes: ["rpc", "identify", "messages.read"],
     redirectUri: "https://discord.com"
-})  
+})
