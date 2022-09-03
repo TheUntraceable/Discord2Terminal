@@ -6,16 +6,22 @@ import inquirer from "inquirer"
 import { createSpinner } from "nanospinner"
 import chalk from "chalk"
 
-marked.setOptions({
-    renderer: new TerminalRenderer( )
-});
-    
 
 const client = new Client({
     transport: "ipc"
 })
 
 client.commands = {}
+
+
+client.addCommand = (name, callback) => {
+    client.commands[name] = callback
+}
+
+marked.setOptions({
+    renderer: new TerminalRenderer( )
+});
+    
 
 
 const parseCommands = async () => {
@@ -57,10 +63,6 @@ client.on("ready", async () => {
     })
     await parseCommands()
 })
-
-client.addCommand = (name, callback) => {
-    client.commands[name] = callback
-}
 
 client.addCommand("select", async (guildString = "", channelString = "") => {
     const guilds = {}
