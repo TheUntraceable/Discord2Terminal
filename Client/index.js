@@ -7,7 +7,7 @@ import { createSpinner } from "nanospinner"
 import chalk from "chalk"
 
 marked.setOptions({
-    renderer: new TerminalRenderer()
+    renderer: new TerminalRenderer( )
 });
     
 
@@ -62,7 +62,7 @@ client.addCommand = (name, callback) => {
     client.commands[name] = callback
 }
 
-client.addCommand("select", async (guildStartswith = "", channelStartswith = "") => {
+client.addCommand("select", async (guildString = "", channelString = "") => {
     const guilds = {}
     for(const guild of client.guilds) {
         guilds[guild.name] = guild
@@ -71,7 +71,7 @@ client.addCommand("select", async (guildStartswith = "", channelStartswith = "")
         type: "list",
         name: "guild",
         message: "Select a guild",
-        choices: Object.keys(guilds).filter(guild => guild.toLowerCase().startsWith(guildStartswith.toLowerCase()))
+        choices: Object.keys(guilds).filter(guild => guild.toLowerCase().includes(guildString.toLowerCase()))
     })
     const guild = guilds[answer.guild]
     const channels = await client.getChannels(guild.id)
@@ -83,7 +83,7 @@ client.addCommand("select", async (guildStartswith = "", channelStartswith = "")
         type: "list",
         name: "channel",
         message: "Select a channel",
-        choices: channels.filter(channel => channel.type === 0 && channel.name.toLowerCase().startsWith(channelStartswith.toLowerCase())).map(channel => channel.name)
+        choices: channels.filter(channel => channel.type === 0 && channel.name.toLowerCase().includes(channelString.toLowerCase())).map(channel => channel.name)
     })
 
     var message = ""
