@@ -41,8 +41,8 @@ export const data = {
             }
         }
         spinner.success({
-            text: `Subscribed to MESSAGE_CREATE for ${subscribed}/${Object.keys(client.channels).length} channels!`
+            text: `Subscribed to MESSAGE_CREATE for ${subscribed}/${Object.keys(payload.client.channels).length} channels!`
         })
-        await parseCommands()    
+        await parseCommands(payload.client)
     }
 }
