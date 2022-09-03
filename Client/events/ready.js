@@ -16,7 +16,7 @@ const parseCommands = async client => {
 
     if(!command) {
         console.log(chalk.red.underline(`Command not found!`))
-        return await parseCommands()
+        return await parseCommands(client)
     }
     await command(...args).catch(error => {
         console.error(chalk.red.underline(error))
