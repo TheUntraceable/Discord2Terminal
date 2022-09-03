@@ -1,3 +1,7 @@
+import inquirer from "inquirer"
+import chalk from "chalk"
+
+
 export const data = {
     name: "select",
     callback: async (client, guildString = "", channelString = "") => {

@@ -21,7 +21,7 @@ const parseCommands = async client => {
     await command(...args).catch(error => {
         console.error(chalk.red.underline(error))
     })
-    return await parseCommands()
+    return await parseCommands(client)
 }
 
 export const data = {
