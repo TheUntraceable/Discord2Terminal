@@ -1,3 +1,4 @@
+import { createSpinner } from "nanospinner"
 import inquirer from "inquirer"
 import chalk from "chalk"
 
@@ -26,18 +27,16 @@ const parseCommands = async client => {
 export const data = {
     name: "ready",
     async callback(payload) {
-        const { client } = payload
-        console.log("Ready!")
         let subscribed = 0
         const spinner = createSpinner("Subscribing to events to Discord...").start()
-        const guilds = await client.getGuilds()
-        client.guilds = guilds.guilds
+        const guilds = await payload.client.getGuilds()
+        payload.client.guilds = guilds.guilds
     
-        for(const guild of client.guilds) {
-            const channels = await client.getChannels(guild.id)
+        for(const guild of payload.client.guilds) {
+            const channels = await payload.client.getChannels(guild.id)
             for(const channel of channels.filter(channel => channel.type == 0)) {
-                client.channels[channel.id] = []
-                await client.subscribe("MESSAGE_CREATE", { channel_id: channel.id })
+                payload.client.channels[channel.id] = []
+                await payload.client.subscribe("MESSAGE_CREATE", { channel_id: channel.id })
                 subscribed++
             }
         }

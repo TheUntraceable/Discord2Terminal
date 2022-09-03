@@ -1,13 +1,7 @@
 import { Client } from "@theuntraceable/discord-rpc"
-import { marked } from 'marked';
-import TerminalRenderer from 'marked-terminal';
 import config from "../config.json" assert {type: "json"}
 import { createSpinner } from "nanospinner"
 import fs from "fs"
-
-marked.setOptions({
-    renderer: new TerminalRenderer()
-});
 
 const client = new Client({
     transport: "ipc"
@@ -60,7 +54,6 @@ for(const file of fs.readdirSync("./events")) {
 
     client.on(event.data.name, async payload => {
         payload.client = client
-        console.log(`Emitting ${event.data.name}...`)
         await event.data.callback(payload)
         }
     )
