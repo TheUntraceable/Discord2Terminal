@@ -54,7 +54,7 @@ client.on("ready", async () => {
         const channels = await client.getChannels(guild.id)
         for(const channel of channels.filter(channel => channel.type === 0)) {
             client.channels[channel.id] = []
-            client.subscribe("MESSAGE_CREATE", { channel_id: channel.id })
+            await client.subscribe("MESSAGE_CREATE", { channel_id: channel.id })
             subscribed++
         }
     }
@@ -76,11 +76,14 @@ client.addCommand("select", async (guildString = "", channelString = "") => {
         choices: Object.keys(guilds).filter(guild => guild.toLowerCase().includes(guildString.toLowerCase()))
     })
     const guild = guilds[answer.guild]
+
     const channels = await client.getChannels(guild.id)
     const channelNameToChannel = {}
+   
     for(const channel of channels) {
         channelNameToChannel[channel.name.toLowerCase()] = channel
     }
+
     const channel = await inquirer.prompt({
         type: "list",
         name: "channel",
@@ -89,6 +92,9 @@ client.addCommand("select", async (guildString = "", channelString = "") => {
     })
 
     var message = ""
+    console.log(client.channels[channelNameToChannel[channel.channel].id])
+    console.log(client.channels[channelNameToChannel["general"].id])
+    console.log(channelNameToChannel)
     for(const cachedMessage of client.channels[String(channelNameToChannel[channel.channel].id)]) {
         var messageBlock = chalk.hex(cachedMessage.author_color).underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})`)
         messageBlock += `\n    ${chalk.hex(cachedMessage.author_color)(cachedMessage.content)}`
