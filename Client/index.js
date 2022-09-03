@@ -52,7 +52,7 @@ client.on("ready", async () => {
 
     for(const guild of client.guilds) {
         const channels = await client.getChannels(guild.id)
-        for(const channel of channels.filter(channel => channel.type === 0)) {
+        for(const channel of channels.filter(channel => channel.type == 0)) {
             client.channels[channel.id] = []
             await client.subscribe("MESSAGE_CREATE", { channel_id: channel.id })
             subscribed++
@@ -77,7 +77,8 @@ client.addCommand("select", async (guildString = "", channelString = "") => {
     })
     const guild = guilds[answer.guild]
 
-    const channels = await client.getChannels(guild.id)
+    const _channels = await client.getChannels(guild.id)
+    const channels = _channels.filter(channel => channel.type == 0)
     const channelNameToChannel = {}
    
     for(const channel of channels) {
@@ -88,13 +89,10 @@ client.addCommand("select", async (guildString = "", channelString = "") => {
         type: "list",
         name: "channel",
         message: "Select a channel",
-        choices: channels.filter(channel => channel.type === 0 && channel.name.toLowerCase().includes(channelString.toLowerCase())).map(channel => channel.name)
+        choices: channels.filter(channel => channel.type == 0 && channel.name.toLowerCase().includes(channelString.toLowerCase())).map(channel => channel.name)
     })
 
     var message = ""
-    console.log(client.channels[channelNameToChannel[channel.channel].id])
-    console.log(client.channels[channelNameToChannel["general"].id])
-    console.log(channelNameToChannel)
     for(const cachedMessage of client.channels[String(channelNameToChannel[channel.channel].id)]) {
         var messageBlock = chalk.hex(cachedMessage.author_color).underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})`)
         messageBlock += `\n    ${chalk.hex(cachedMessage.author_color)(cachedMessage.content)}`
