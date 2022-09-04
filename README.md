@@ -10,7 +10,9 @@ It *would* be, if I didn't mask it via my API. The flow of things is:
 2. There is a request to **my API**
 3. My API will find an available webhook in that channel\*
 4. Your message wil be sent\*\*
+
 \* An "available webhook" means that it is not ratelimited, and is for the currently selected channel.
+
 \*\* The sending of the message may be delayed if it cannot find an available webhook.
 ## How do I use it?
 ### Client
