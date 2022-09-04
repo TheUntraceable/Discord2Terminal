@@ -23,7 +23,7 @@ const commandSpinner = createSpinner("Loading commands...").start()
 client.addCommand("cls", async () => {
     console.clear()
 }).addCommand("eval", async (code = "") => {
-    await eval(code)
+    eval(code)
 }).addCommand("clear", async () => {
     console.clear()
 })
@@ -64,23 +64,6 @@ for(const file of fs.readdirSync("./events")) {
 eventSpinner.success({
     text: `Loaded ${events} events!`
 })
-
-client.on("error", error => {
-    console.log(chalk.red.underline(error))
-})
-
-process.on("unhandledRejection", (reason, p) => {
-    console.log(reason, p);
-});
-process.on("uncaughtException", (err, origin) => {
-    console.log(err, origin);
-});
-process.on("uncaughtExceptionMonitor", (err, origin) => {
-    console.log(err, origin);
-});
-process.on("multipleResolves", (type, promise, reason) => {
-    console.log(type, promise, reason);
-});
 
 client.login({
     clientId: config.clientId,
