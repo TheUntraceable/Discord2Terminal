@@ -36,12 +36,13 @@ export const data = {
         var lastAuthor = null
         for(const cachedMessage of client.channels[String(channelNameToChannel[channel.channel].id)]) {
             
-            var messageBlock;
+            var messageBlock = ""
             if(lastAuthor != cachedMessage.author.id) {
-                messageBlock += chalk.hex(cachedMessage.author_color || "#FFFFFF11").underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})\n  `)
+                messageBlock += chalk.hex(cachedMessage.author_color || "#FFFFFF11").underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})`)
+                messageBlock += "\n"
                 lastAuthor = cachedMessage.author.id
             }
-            messageBlock += `${chalk.hex(cachedMessage.author_color || "#FFFFFF11")(cachedMessage.content)}`
+            messageBlock += `  ${chalk.hex(cachedMessage.author_color || "#FFFFFF11")(cachedMessage.content)}`
             message += messageBlock
         }
         console.log(message)
