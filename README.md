@@ -1,7 +1,10 @@
 # Discord2Terminal
 ## What is this?
 Have you ever wanted to use Discord? Have you ever wanted to code? Are you in a load of servers? Is Discord becoming a distraction? Have you wanted to use Discord as a CLI without having to selfbot? I'm here to solve that!
-This uses DiscordRPC to cache messages in each channel, and then displays them back to you in the terminal, in an attractive way too! But, that doesn't solve having Discord in the Terminal... Well, I thought the same thing, and I got a solve for that too! Check the Bot folder!
+
+This uses DiscordRPC to cache messages in each channel, and then displays them back to you in the terminal, in an attractive way too! 
+But, that doesn't solve having Discord in the Terminal... 
+Well, I thought the same thing, and I got a solve for that too! Check the Bot folder!
 The bot folder contains a Discord bot integrated with an ExpressJS server. What it does is lets server admins (or people with the `MANAGE_WEBHOOKS` permission) to create webhooks. The bot then saves the information of the webhooks in its database, this avoids the bot from using a webhook you have setup for something else!
 After this, in the Client, Soon, you will be able to send messages!
 ### Isn't that a security threat?
@@ -38,3 +41,8 @@ Create a `config.json` file, with contents looking like:
 }
 ```
 After that, **make sure you have Discord open.**, you can go to the Client folder, and run `node .` to start the client. It will open up Discord, and you will be prompted to authorize the app. Once that all happens, spend the rest of your day in the command line!
+
+## Commands
+| Command Name | Description | Arguments | Output Description |
+| :----------- | :---------: | :-------: | -----------------: |
+| select       | View messages in a channel | Partial Server Name?, Partial Channel Name? | The messages in that channel displayed nicely |
