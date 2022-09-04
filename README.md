@@ -43,6 +43,16 @@ Create a `config.json` file, with contents looking like:
 After that, **make sure you have Discord open.**, you can go to the Client folder, and run `node .` to start the client. It will open up Discord, and you will be prompted to authorize the app. Once that all happens, spend the rest of your day in the command line!
 
 ## Commands
+Below will be a table of commands. 
+
+Arguments are separated by a comma **in the documentation**, you would pass in `command arg1 arg2` normally.
+
+If an argument ends with a `?`, it means that it is optional.
+
+Partial means that the argument will filter values to show you, by the `list.filter(item => item.includes(argument))`.
+
+
 | Command Name | Description | Arguments | Output Description |
 | :----------- | :---------: | :-------: | -----------------: |
 | select       | View messages in a channel | Partial Server Name?, Partial Channel Name? | The messages in that channel displayed nicely |
+
