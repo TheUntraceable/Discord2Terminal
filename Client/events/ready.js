@@ -28,6 +28,7 @@ const parseCommands = async client => {
 export const data = {
     name: "ready",
     async callback(payload) {
+        payload.client.subscribe("NOTIFICATION_CREATE")
         let subscribed = 0
         const spinner = createSpinner("Subscribing to events to Discord...").start()
         const guilds = await payload.client.getGuilds()

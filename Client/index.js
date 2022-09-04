@@ -85,6 +85,6 @@ process.on("multipleResolves", (type, promise, reason) => {
 client.login({
     clientId: config.clientId,
     clientSecret: config.clientSecret,
-    scopes: ["rpc", "identify", "messages.read"],
+    scopes: ["rpc", "identify", "messages.read", "rpc.notifications.read"],
     redirectUri: "https://discord.com"
 })
