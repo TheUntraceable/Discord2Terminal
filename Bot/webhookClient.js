@@ -1,5 +1,5 @@
-const axios = require("axios")
-const chalk = require("chalk")
+import got from "got"
+import chalk from "chalk"
 
 class Webhook {
     constructor(webhookId, webhookToken) {
@@ -16,7 +16,7 @@ class RatelimitedWebhook extends Webhook {
     }
 }
 
-module.exports = class WebhookClient {
+export class WebhookClient {
     constructor(webhooks) {
         this.webhooks = webhooks // A list of Webhook
         this.ratelimited = [] // A list of RatelimitedWebhook

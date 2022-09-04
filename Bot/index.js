@@ -1,9 +1,9 @@
-const { Client, IntentsBitField, InteractionType, PermissionsBitField, Routes, SlashCommandBuilder } = require("discord.js")
-const chalk = require("chalk")
-const { MongoClient } = require('mongodb');
-const WebhookManager = require("./webhookClient")
-const express = require("express")
-const config = require("../config.json");
+import { Client, IntentsBitField, InteractionType, PermissionsBitField, Routes, SlashCommandBuilder } from "discord.js"
+import chalk from "chalk"
+import { MongoClient } from 'mongodb';
+import WebhookManager from ("./webhookClient")
+import express from "express"
+import config from "../config.json" assert {type: "json"}
 
 const client = new Client({intents: [IntentsBitField.Flags.Guilds]});
 const app = express()
