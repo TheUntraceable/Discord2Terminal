@@ -42,13 +42,8 @@ export class WebhookClient {
 
     async execute(webhook, message, author) {
         console.log(chalk.green.underline("Executing webhook..."))
-        const response = await axios({
-            method: "post",
-            url: webhook.url,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data: {
+        const response = await got.post(`${webhook.url}?wait=true`, {
+            json: {
                 content: message,
                 username: author.username,
                 avatar_url: author.avatar

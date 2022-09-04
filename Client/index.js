@@ -65,9 +65,13 @@ eventSpinner.success({
     text: `Loaded ${events} events!`
 })
 
+client.on("ready", payload => {
+    console.log(payload)
+})
+
 client.login({
     clientId: config.clientId,
     clientSecret: config.clientSecret,
-    scopes: ["rpc", "identify", "messages.read", "rpc.notifications.read"],
+    scopes: ["rpc", "identify", "messages.read", "rpc.notifications.read", "guilds"],
     redirectUri: "https://discord.com"
 })
