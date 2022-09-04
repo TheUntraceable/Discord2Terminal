@@ -29,7 +29,7 @@ After you run these commands, you need to do a little setup.
 Create a `config.json` file, with contents looking like:
 ```jsonc
 {
-    "mongoUri": "The URL to a MongoDB Cluster.",
+    "mongoUri": "The URL to a MongoDB Cluster.", // this is optional, and is only used by the backend which you shouldn't need to run
     "clientId": "Your client ID",
     "clientSecret": "Client secret here", 
     "clientToken": "token",
