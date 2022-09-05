@@ -30,11 +30,15 @@ export const data = {
             message: "Select a channel",
             choices: channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase())).map(channel => channel.name)
         })
-
-        const selectedChannel = channelNameToChannel[channel.channel]
-        await payload.client.selectVoiceChannel(selectedChannel.id, {
-            force: true
-        })
-        console.log(chalk.green(`Successfully joined ${channel.name}`))
+        const selectedChannel = channelNameToChannel[channel.channel.toLowerCase()]
+        try {
+            await client.selectVoiceChannel(selectedChannel.id, {
+                force: true
+            })
+            console.log(chalk.green(`Successfully joined ${channel.channel}`))
+        } catch(error) {
+            console.log(chalk.red(`Failed to join ${channel.channel}`))
+            client.emit("commandError", error)
+        }
     }
 }
