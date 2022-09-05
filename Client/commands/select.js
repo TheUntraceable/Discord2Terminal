@@ -1,5 +1,5 @@
-import inquirer from "inquirer"
-import chalk from "chalk"
+    import inquirer from "inquirer"
+    import chalk from "chalk"
 
 
 export const data = {
@@ -29,7 +29,7 @@ export const data = {
             type: "list",
             name: "channel",
             message: "Select a channel",
-            choices: channels.filter(channel => channel.type == 0 && channel.name.toLowerCase().includes(channelString.toLowerCase())).map(channel => channel.name)
+            choices: channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase())).map(channel => channel.name)
         })
     
         var message = ""

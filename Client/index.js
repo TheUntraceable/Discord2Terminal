@@ -70,6 +70,6 @@ eventSpinner.success({
 client.login({
     clientId: config.clientId,
     clientSecret: config.clientSecret,
-    scopes: ["rpc","messages.read", "rpc.notifications.read"],
+    scopes: ["rpc","messages.read", "rpc.notifications.read", "rpc.voice.read"],
     redirectUri: "https://discord.com"
 })

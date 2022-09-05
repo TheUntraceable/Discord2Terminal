@@ -17,19 +17,18 @@ export const data = {
         const guild = guilds[answer.guild]
     
         const _channels = await client.getChannels(guild.id)
-        const channels = _channels.filter(channel => channel.type == 0)
+        const channels = _channels.filter(channel => [2, 13].includes(channel.type))
         const channelNameToChannel = {}
        
         for(const channel of channels) {
             channelNameToChannel[channel.name.toLowerCase()] = channel
-            console.log(channel.type)
         }
     
         const channel = await inquirer.prompt({
             type: "list",
             name: "channel",
             message: "Select a channel",
-            choices: channels.filter(channel => [2, 13].includes(channel.type) && channel.name.toLowerCase().includes(channelString.toLowerCase())).map(channel => channel.name)
+            choices: channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase())).map(channel => channel.name)
         })
 
         const selectedChannel = channelNameToChannel[channel.channel]
