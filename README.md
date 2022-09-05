@@ -1,7 +1,10 @@
 # Discord2Terminal
 ## What is this?
-Have you ever wanted to use Discord? Have you ever wanted to code? Are you in a load of servers? Is Discord becoming a distraction? I'm here to solve that!
-This uses DiscordRPC to cache messages in each channel, and then displays them back to you in the terminal, in an attractive way too! But, that doesn't solve having Discord in the Terminal... Well, I thought the same thing, and I got a solve for that too! Check the Bot folder!
+Have you ever wanted to use Discord? Have you ever wanted to code? Are you in a load of servers? Is Discord becoming a distraction? Have you wanted to use Discord as a CLI without having to selfbot? I'm here to solve that!
+
+This uses DiscordRPC to cache messages in each channel, and then displays them back to you in the terminal, in an attractive way too! 
+But, that doesn't solve having Discord in the Terminal... 
+Well, I thought the same thing, and I got a solve for that too! Check the Bot folder!
 The bot folder contains a Discord bot integrated with an ExpressJS server. What it does is lets server admins (or people with the `MANAGE_WEBHOOKS` permission) to create webhooks. The bot then saves the information of the webhooks in its database, this avoids the bot from using a webhook you have setup for something else!
 After this, in the Client, Soon, you will be able to send messages!
 ### Isn't that a security threat?
@@ -29,7 +32,7 @@ After you run these commands, you need to do a little setup.
 Create a `config.json` file, with contents looking like:
 ```jsonc
 {
-    "mongoUri": "The URL to a MongoDB Cluster.",
+    "mongoUri": "The URL to a MongoDB Cluster.", // this is optional, and is only used by the backend which you shouldn't need to run
     "clientId": "Your client ID",
     "clientSecret": "Client secret here", 
     "clientToken": "token",
@@ -38,3 +41,18 @@ Create a `config.json` file, with contents looking like:
 }
 ```
 After that, **make sure you have Discord open.**, you can go to the Client folder, and run `node .` to start the client. It will open up Discord, and you will be prompted to authorize the app. Once that all happens, spend the rest of your day in the command line!
+
+## Commands
+Below will be a table of commands. 
+
+Arguments are separated by a comma **in the documentation**, you would pass in `command arg1 arg2` normally.
+
+If an argument ends with a `?`, it means that it is optional.
+
+Partial means that the argument will filter values to show you, by the `list.filter(item => item.includes(argument))`.
+
+
+| Command Name | Description | Arguments | Output Description |
+| :----------- | :---------: | :-------: | -----------------: |
+| select       | View messages in a channel | Partial Server Name?, Partial Channel Name? | The messages in that channel displayed nicely |
+
