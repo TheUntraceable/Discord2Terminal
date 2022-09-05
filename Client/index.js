@@ -1,5 +1,6 @@
 import { Client } from "@theuntraceable/discord-rpc"
 import config from "../config.json" assert {type: "json"}
+import settings from "./settings.json" assert {type: "json"}
 import { createSpinner } from "nanospinner"
 import fs from "fs"
 
@@ -10,6 +11,7 @@ const client = new Client({
 client.channels = {}
 client.commands = {}
 
+if(!settings) {} // TODO
 
 client.addCommand = (name, callback) => {
     client.commands[name] = callback
@@ -50,7 +52,7 @@ let events = 0
 for(const file of fs.readdirSync("./events")) {
     const spinner = createSpinner(`Loading event ${file}...`).start()
     const event = await import(`./events/${file}`)
-
+    
     client.on(event.data.name, async payload => {
         payload.client = client
         await event.data.callback(payload)
