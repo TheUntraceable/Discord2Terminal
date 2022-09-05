@@ -37,8 +37,14 @@ export const data = {
         for(const guild of payload.client.guilds) {
             const channels = await payload.client.getChannels(guild.id)
             for(const channel of channels.filter(channel => channel.type == 0)) {
-                payload.client.channels[channel.id] = []
+                payload.client.channels[channel.id] = {
+                    created: [],
+                    updated: [],
+                    deleted: []
+                }
                 await payload.client.subscribe("MESSAGE_CREATE", { channel_id: channel.id })
+                await payload.client.subscribe("MESSAGE_UPDATE", { channel_id: channel.id })
+                await payload.client.subscribe("MESSAGE_DELETE", { channel_id: channel.id })
                 subscribed++
             }
         }

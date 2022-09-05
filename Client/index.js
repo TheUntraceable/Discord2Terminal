@@ -67,10 +67,6 @@ eventSpinner.success({
     text: `Loaded ${events} events!`
 })
 
-client.on("ready", payload => {
-    console.log(payload)
-})
-
 client.login({
     clientId: config.clientId,
     clientSecret: config.clientSecret,

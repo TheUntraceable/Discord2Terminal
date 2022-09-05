@@ -4,7 +4,7 @@ import chalk from "chalk"
 
 export const data = {
     name: "select",
-    callback: async (client, guildString = "", channelString = "") => {
+    async callback(client, guildString = "", channelString = "") {
         const guilds = {}
         for(const guild of client.guilds) {
             guilds[guild.name] = guild
@@ -34,17 +34,24 @@ export const data = {
     
         var message = ""
         var lastAuthor = null
-        for(const cachedMessage of client.channels[String(channelNameToChannel[channel.channel].id)]) {
-            
+        const selectedChannel = client.channels[String(channelNameToChannel[channel.channel].id)]
+        for(const cachedMessage of [...selectedChannel.created, ...selectedChannel.deleted].sort((a, b) => a.id - b.id)) {
+
             var messageBlock = ""
             if(lastAuthor != cachedMessage.author.id) {
                 messageBlock += chalk.hex(cachedMessage.author_color || "#FFFFFF11").underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})`)
                 messageBlock += "\n"
                 lastAuthor = cachedMessage.author.id
             }
-            messageBlock += `  ${chalk.hex(cachedMessage.author_color || "#FFFFFF11")(cachedMessage.content)}`
+
+            for(const updated of selectedChannel.updated) {
+                messageBlock += `  ${chalk.hex("#FF0000")(updated.content)}\n`
+            }
+    
+            messageBlock += `  ${cachedMessage.content}`
             message += messageBlock
         }
+
         console.log(message)
     }
 }
