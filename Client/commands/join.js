@@ -22,6 +22,7 @@ export const data = {
        
         for(const channel of channels) {
             channelNameToChannel[channel.name.toLowerCase()] = channel
+            console.log(channel.type)
         }
     
         const channel = await inquirer.prompt({
