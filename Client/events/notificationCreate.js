@@ -16,9 +16,11 @@ export const data = {
             pushed = true
         }
 
+        
+        const channel = payload.client.channels[message.channel_id]
+
         if(!pushed) channel.created.push(message)
 
-        const channel = payload.client.channels[message.channel_id]
         if(channel.created.slice(-1)[0].author.id != message.author.id || channel.created.length == 1) {
             console.log("\n" + chalk.hex(message.author_color || "#FFFFFF11").underline(`${message.author.username}#${message.author.discriminator} (${message.author.id})`))
         }
