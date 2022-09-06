@@ -35,23 +35,25 @@ export const data = {
         var message = ""
         var lastAuthor = null
         const selectedChannel = client.channels[String(channelNameToChannel[channel.channel].id)]
-        for(const cachedMessage of [...selectedChannel.created, ...selectedChannel.deleted].sort((a, b) => a.id - b.id)) {
+        for(const cachedMessage of selectedChannel.created) {
 
             var messageBlock = ""
+
             if(lastAuthor != cachedMessage.author.id) {
-                messageBlock += chalk.hex(cachedMessage.author_color || "#FFFFFF11").underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})`)
-                messageBlock += "\n"
+                messageBlock += chalk.hex(cachedMessage.author_color || "#FFFFFF11").underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})\n`)
                 lastAuthor = cachedMessage.author.id
             }
-
+            
             for(const updated of selectedChannel.updated.filter(updated => updated.id == cachedMessage.id)) {
                 messageBlock += `  ${chalk.blue(updated.content)}\n`
             }
+
             if(selectedChannel.deleted.find(deleted => deleted.id == cachedMessage.id)) {
                 messageBlock += `  ${chalk.red(cachedMessage.content)}\n`
             } else {
-                messageBlock += `  ${cachedMessage.content}`
+                messageBlock += `  ${cachedMessage.content}\n`
             }
+
             message += messageBlock
         }
 
