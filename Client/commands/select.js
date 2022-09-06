@@ -47,6 +47,7 @@ export const data = {
             console.log(selectedChannel.updated.filter(updated => updated.id == cachedMessage.id))
             for(const updated of selectedChannel.updated.filter(updated => updated.id == cachedMessage.id)) {
                 messageBlock += `  ${chalk.blue(updated.content)}\n`
+                console.log(updated.content)
             }
 
             if(selectedChannel.deleted.find(deleted => deleted.id == cachedMessage.id)) {
