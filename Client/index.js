@@ -10,6 +10,7 @@ const client = new Client({
 
 client.channels = {}
 client.commands = {}
+client.users = {}
 
 if(!settings) {} // TODO
 
