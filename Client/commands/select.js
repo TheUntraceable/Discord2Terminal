@@ -44,12 +44,16 @@ export const data = {
                 lastAuthor = cachedMessage.author.id
             }
             
+            console.log(selectedChannel.updated.filter(updated => updated.id == cachedMessage.id))
             for(const updated of selectedChannel.updated.filter(updated => updated.id == cachedMessage.id)) {
                 messageBlock += `  ${chalk.blue(updated.content)}\n`
             }
 
             if(selectedChannel.deleted.find(deleted => deleted.id == cachedMessage.id)) {
-                messageBlock += `  ${chalk.red(cachedMessage.content)}\n`
+                // messageBlock += `  ${chalk.red(cachedMessage.content)}\n`
+                messageBlock += "  "
+                messageBlock += chalk.red(cachedMessage.content)
+                messageBlock += "\n"
             } else {
                 messageBlock += `  ${cachedMessage.content}\n`
             }
