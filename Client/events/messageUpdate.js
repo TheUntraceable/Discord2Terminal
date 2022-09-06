@@ -10,7 +10,9 @@ export const data = {
     async callback(payload) {
         const channel = payload.client.channels[payload.channel_id]
         if(!channel) return
-        payload.message.content = marked(payload.message.content)
+        if(payload.message.content) {
+            payload.message.content = marked(payload.message.content)
+        }
         const message = channel.created.find(message => {
             if(!message) return false
             return message.id == payload.message.id
