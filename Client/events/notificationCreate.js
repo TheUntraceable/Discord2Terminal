@@ -8,7 +8,11 @@ export const data = {
         let pushed = false
 
         if(!payload.client.channels[message.channel_id]) {
-            payload.client.channels[message.channel_id] = [message]
+            payload.client.channels[message.channel_id] = {
+                created: [message],
+                updated: [],
+                deleted: []
+            }
             pushed = true
         }
         const channel = payload.client.channels[message.channel_id]
