@@ -12,6 +12,7 @@ export const data = {
         }])
         const user = Object.values(client.users).find(user => user.username === answer.user)
         const messages = Object.values(client.channels).filter(channel => channel.type == 1 && channel.id == user.id)
+        console.log(messages)
         let lastAuthor = "";
 
         for(const message of messages) {

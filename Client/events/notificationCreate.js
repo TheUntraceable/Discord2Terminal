@@ -16,11 +16,10 @@ export const data = {
             pushed = true
         }
         const channel = payload.client.channels[message.channel_id]
-
-        if(channel.slice(-1)[0].author.id != message.author.id || channel.length == 1) {
+        if(channel.created.slice(-1)[0].author.id != message.author.id || channel.created.length == 1) {
             console.log("\n" + chalk.hex(message.author_color || "#FFFFFF11").underline(`${message.author.username}#${message.author.discriminator} (${message.author.id})`))
         }
         console.log(`\n  ${chalk.hex(message.author_color || "#FFFFFF11")(message.content)}`)
-        if(!pushed) channel.push(message)
+        if(!pushed) channel.created.push(message)
     }
 }

@@ -57,7 +57,7 @@ for(const file of fs.readdirSync("./events")) {
     
     client.on(event.data.name, async payload => {
         payload.client = client
-        await event.data.callback(payload)
+        await event.data.callback(payload).catch(console.error)
     })
     events++
     spinner.success({
