@@ -23,7 +23,7 @@ export const data = {
         } else {
             const index = channel.created.indexOf(message)
             const removed = channel.created.splice(index, 1)[0]
-            channel.created[index] = payload.message
+            channel.created.push(payload.message)
             channel.updated.push(removed)
         }
    }

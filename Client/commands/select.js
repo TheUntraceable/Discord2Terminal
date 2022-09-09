@@ -1,6 +1,5 @@
-    import inquirer from "inquirer"
-    import chalk from "chalk"
-
+import inquirer from "inquirer"
+import chalk from "chalk"
 
 export const data = {
     name: "select",
@@ -16,7 +15,10 @@ export const data = {
             choices: Object.keys(guilds).filter(guild => guild.toLowerCase().includes(guildString.toLowerCase()))
         })
         const guild = guilds[answer.guild]
-    
+        if(!guild) {
+            console.log(chalk.red("Failed to get channels. Guild may not exist"))
+            return
+        }
         const _channels = await client.getChannels(guild.id)
         const channels = _channels.filter(channel => channel.type == 0)
         const channelNameToChannel = {}
@@ -32,30 +34,26 @@ export const data = {
             choices: channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase())).map(channel => channel.name)
         })
     
-        var message = ""
-        var lastAuthor = null
+        let message = ""
+        let lastAuthor = null
         const selectedChannel = client.channels[String(channelNameToChannel[channel.channel].id)]
-        for(const cachedMessage of selectedChannel.created) {
+        for(const cachedMessage of selectedChannel.created.sort((a, b) => a.id - b.id)) {
 
-            var messageBlock = ""
+            let messageBlock = ""
 
             if(lastAuthor != cachedMessage.author.id) {
                 messageBlock += chalk.hex(cachedMessage.author_color || "#FFFFFF11").underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})\n`)
                 lastAuthor = cachedMessage.author.id
             }
             
-            console.log(selectedChannel.updated.filter(updated => updated.id == cachedMessage.id))
             for(const updated of selectedChannel.updated.filter(updated => updated.id == cachedMessage.id)) {
-                messageBlock += `  ${chalk.blue(updated.content)}\n`
-                console.log(updated.content)
+                messageBlock += `  ${chalk.hex("#0000ff")(updated.content)}\n`
             }
-
             if(selectedChannel.deleted.find(deleted => deleted.id == cachedMessage.id)) {
-                // messageBlock += `  ${chalk.red(cachedMessage.content)}\n`
-                messageBlock += "  "
-                messageBlock += chalk.red(cachedMessage.content)
-                messageBlock += "\n"
+                console.log("Passed")
+                messageBlock += `  ${chalk.red(cachedMessage.content)}\n`
             } else {
+                console.log("Failed")
                 messageBlock += `  ${cachedMessage.content}\n`
             }
 

@@ -4,5 +4,6 @@ export const data = {
         const channel = payload.client.channels[payload.channel_id]
         if(!channel) return
         channel.deleted.push(payload.message)
+
     }
 }
