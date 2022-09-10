@@ -33,14 +33,13 @@ export const data = {
     async callback(payload) {
         payload.client.settings.token = {
             expiresAt: new Date(payload.expires),
-            accessToken: payload.accessToken
+            accessToken: payload.client.accessToken
         }
 
         await fs.writeFile("./settings.json", JSON.stringify(payload.client.settings, null, 4))
 
         payload.client.subscribe("NOTIFICATION_CREATE")
         let subscribed = 0
-        console.log(chalk.green.underline(`Subscribing to events to Discord... (takes <1m)`))
         const guilds = await payload.client.getGuilds()
         payload.client.guilds = guilds.guilds
         
@@ -58,7 +57,8 @@ export const data = {
         cachingSpinner.success({
             text: `Cached ${Object.keys(payload.client.channels).length} channels!`
         })
-        const subscriptionBar = new ProgressBar("[:bar] Subscribing to events... :rate subscriptions per second :percent done :etas :current/:total channels", { 
+        console.log(chalk.green.underline(`Subscribing to events to Discord... (takes <1m)`))
+        const subscriptionBar = new ProgressBar("[:bar] :rate subscriptions per second :percent done :etas :current/:total channels", { 
             total: Object.keys(payload.client.channels).length,
             complete: chalk.green("="),
             incomplete: chalk.red("-"),

@@ -16,8 +16,7 @@ export const data = {
         })
         const guild = guilds[answer.guild]
     
-        const _channels = await client.getChannels(guild.id)
-        const channels = _channels.filter(channel => [2, 13].includes(channel.type))
+        const channels = (await client.getChannels(guild.id)).filter(channel => [2, 13].includes(channel.type))
         const channelNameToChannel = {}
        
         for(const channel of channels) {

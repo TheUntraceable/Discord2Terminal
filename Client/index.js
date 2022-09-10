@@ -29,7 +29,7 @@ const loginOptions = {
 }
 
 if(client.settings.token) {
-    if(client.settings.token.expiresAt > Date.now()) {
+    if(new Date(client.settings.token.expiresAt) > Date.now()) {
         loginOptions.accessToken = client.settings.token.accessToken
     }
 }
