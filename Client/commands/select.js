@@ -3,24 +3,27 @@ import chalk from "chalk"
 
 export const data = {
     name: "select",
-    async callback(client, guildString = "", channelString = "") {
+    async callback(client, flags ,guildString = "", channelString = "") {
         const guilds = {}
         for(const guild of client.guilds) {
             guilds[guild.name] = guild
         }
+
         const answer = await inquirer.prompt({
             type: "list",
             name: "guild",
             message: "Select a guild",
             choices: Object.keys(guilds).filter(guild => guild.toLowerCase().includes(guildString.toLowerCase()))
         })
+
         const guild = guilds[answer.guild]
+
         if(!guild) {
             console.log(chalk.red("Failed to get channels. Guild may not exist"))
             return
         }
-        const _channels = await client.getChannels(guild.id)
-        const channels = _channels.filter(channel => channel.type == 0)
+
+        const channels = (await client.getChannels(guild.id)).filter(channel => channel.type == 0)
         const channelNameToChannel = {}
        
         for(const channel of channels) {
@@ -51,7 +54,7 @@ export const data = {
             }
             if(selectedChannel.deleted.find(deleted => deleted.id == cachedMessage.id)) {
                 console.log("Passed")
-                messageBlock += `  ${chalk.red(cachedMessage.content)}\n`
+                messageBlock += `  ${chalk.hex("#ff0000")(cachedMessage.content)}\n`
             } else {
                 console.log("Failed")
                 messageBlock += `  ${cachedMessage.content}\n`
