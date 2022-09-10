@@ -21,9 +21,17 @@ client.captureRejections = true
 
 await load(client)
 
-client.login({
+const loginOptions = {
     clientId: config.clientId,
     clientSecret: config.clientSecret,
     scopes: ["rpc","messages.read", "rpc.notifications.read", "rpc.voice.read"],
     redirectUri: "https://discord.com"
-})
+}
+
+if(client.settings.token) {
+    if(client.settings.token.expiresAt > Date.now()) {
+        loginOptions.accessToken = client.settings.token.accessToken
+    }
+}
+
+client.login(loginOptions)

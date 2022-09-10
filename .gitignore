@@ -2,4 +2,4 @@ config.json
 package-lock.json
 node_modules
 testing.js
-commandHistory.
+settings.json

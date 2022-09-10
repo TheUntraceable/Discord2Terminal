@@ -1,5 +1,6 @@
 import { createSpinner } from "nanospinner"
 import inquirer from "inquirer"
+import fs from "fs/promises"
 import chalk from "chalk"
 
 const parseCommands = async client => {
@@ -29,6 +30,13 @@ const parseCommands = async client => {
 export const data = {
     name: "ready",
     async callback(payload) {
+        payload.client.settings.token = {
+            expiresAt: new Date(payload.expires),
+            accessToken: payload.accessToken
+        }
+
+        // await fs.writeFile("./settings.json", JSON.stringify(payload.client.settings, null, 4))
+
         payload.client.subscribe("NOTIFICATION_CREATE")
         let subscribed = 0
         const spinner = createSpinner("Subscribing to events to Discord... (takes <2m)").start()
