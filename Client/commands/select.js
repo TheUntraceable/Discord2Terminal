@@ -3,7 +3,7 @@ import chalk from "chalk"
 
 export const data = {
     name: "select",
-    async callback(client, flags ,guildString = "", channelString = "") {
+    async callback(client, guildString = "", channelString = "") {
         const guilds = {}
         for(const guild of client.guilds) {
             guilds[guild.name] = guild
@@ -50,6 +50,7 @@ export const data = {
             }
             
             for(const updated of selectedChannel.updated.filter(updated => updated.id == cachedMessage.id)) {
+                console.log("Updated has been triggered.")
                 messageBlock += `  ${chalk.hex("#0000ff")(updated.content)}\n`
             }
             if(selectedChannel.deleted.find(deleted => deleted.id == cachedMessage.id)) {

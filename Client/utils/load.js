@@ -13,10 +13,7 @@ export async function load(client) {
     for(const file of fs.readdirSync("./commands")) {
         const spinner = createSpinner(`Loading command ${file}...`).start()
         const command = await import(`../commands/${file}`)
-        const callback = async (...args) => {
-            await command.data.callback(client, ...args)
-        }
-        client.addCommand(command.data.name, callback)
+        client.addCommand(command.data.name, command.data.callback)
         spinner.success({
             text: `Loaded command ${file}!`
         })

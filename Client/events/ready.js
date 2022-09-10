@@ -12,7 +12,7 @@ const parseCommands = async client => {
     let string = answer.command
     while(string[0] == " ") string = string.slice(1)
     const commandName = string.split(" ")[0]
-    const args = string.split(" ").filter(arg => arg !== "").splice(1, string.split(" ").length)
+    const args = string.split(" ").filter(arg => arg !== " ").splice(1, string.split(" ").length)
     const command = client.commands[commandName]
 
     if(!command) {
@@ -20,7 +20,7 @@ const parseCommands = async client => {
         return await parseCommands(client)
     }
     await command(client, ...args).catch(error => {
-        console.log(error)
+        console.error(error)
         console.error(chalk.red.underline(error))
     })
     return await parseCommands(client)
