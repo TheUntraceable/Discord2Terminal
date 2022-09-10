@@ -11,9 +11,6 @@ client.channels = {}
 client.commands = {}
 client.users = {}
 
-
-if(!settings) {} // TODO
-
 client.addCommand = (name, callback) => {
     client.commands[name] = callback
     return client
