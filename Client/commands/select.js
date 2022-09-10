@@ -50,14 +50,11 @@ export const data = {
             }
             
             for(const updated of selectedChannel.updated.filter(updated => updated.id == cachedMessage.id)) {
-                console.log("Updated has been triggered.")
                 messageBlock += `  ${chalk.hex("#0000ff")(updated.content)}\n`
             }
             if(selectedChannel.deleted.find(deleted => deleted.id == cachedMessage.id)) {
-                console.log("Passed")
                 messageBlock += `  ${chalk.hex("#ff0000")(cachedMessage.content)}\n`
             } else {
-                console.log("Failed")
                 messageBlock += `  ${cachedMessage.content}\n`
             }
 
