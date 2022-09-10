@@ -1,5 +1,6 @@
 import { Client } from "@theuntraceable/discord-rpc"
 import config from "../config.json" assert {type: "json"}
+import fs from "fs/promises"
 import settings from "./settings.json" assert {type: "json"}
 import { load } from "./utils/load.js"
 
@@ -34,4 +35,11 @@ if(client.settings.token) {
     }
 }
 
-client.login(loginOptions)
+client.login(loginOptions).catch(async () => {
+    if(loginOptions.accessToken) {
+        delete client.settings.token
+        delete loginOptions.accessToken
+        await fs.writeFile("./settings.json/", JSON.stringify(client.settings, null, 4))
+        client.login(loginOptions)
+    }
+})
