@@ -6,8 +6,12 @@ export async function load(client) {
 
     client.addCommand("cls", async () => {
         console.clear()
-    }).addCommand("eval", async (code = "") => {
-        eval(code)
+    }).addCommand("eval", async (code) => {
+        try {
+            await eval(code)
+        } catch (error) {
+            console.error(error)
+        }
     }).addCommand("clear", async () => {
         console.clear()
     })

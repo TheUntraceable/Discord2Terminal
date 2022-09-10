@@ -31,7 +31,7 @@ export const data = {
     async callback(payload) {
         payload.client.subscribe("NOTIFICATION_CREATE")
         let subscribed = 0
-        const spinner = createSpinner("Subscribing to events to Discord...").start()
+        const spinner = createSpinner("Subscribing to events to Discord... (takes <2m)").start()
         const guilds = await payload.client.getGuilds()
         payload.client.guilds = guilds.guilds
     
