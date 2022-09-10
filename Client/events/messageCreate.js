@@ -8,9 +8,9 @@ marked.setOptions({
 export const data = {
     name: "MESSAGE_CREATE",
     async callback(payload) {
-        if(payload.message.content) {
-            payload.message.content = marked(payload.message.content)
-        }
+        if(!payload.message.content) return
+        payload.message.content.replace("\n", `\n  `)
+        payload.message.content = marked(payload.message.content)
         payload.client.users[payload.message.author.id] = payload.message.author
         payload.client.channels[payload.channel_id].created.push(payload.message)
     }
