@@ -7,6 +7,7 @@ const client = new Client({
     transport: "ipc"
 })
 
+client.settings = settings
 client.channels = {}
 client.commands = {}
 client.users = {}
