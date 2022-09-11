@@ -30,6 +30,7 @@
   "homepage": "https://github.com/TheUntraceable/Discord2Terminal#readme",
   "dependencies": {
     "@theuntraceable/discord-rpc": "^4.0.4",
+    "better-sqlite3": "^7.6.2",
     "chalk": "4.0.0",
     "discord.js": "^14.3.0",
     "express": "^4.18.1",
@@ -39,7 +40,6 @@
     "marked-terminal": "^5.1.1",
     "mongodb": "^4.9.0",
     "nanospinner": "^1.1.0",
-    "progress": "^2.0.3",
-    "terminal-image": "^1.2.1"
+    "progress": "^2.0.3"
   }
 }
