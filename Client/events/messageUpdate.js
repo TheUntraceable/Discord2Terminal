@@ -19,14 +19,13 @@ export const data = {
             if(!message) return false
             return message.id == payload.message.id
         })
-
+        
+        channel.created.push(message)
         if(!message) {
-            channel.created.push(message)
             return
         } else {
             const index = channel.created.indexOf(message)
             const removed = channel.created.splice(index, 1)[0]
-            channel.created.push(payload.message)
             channel.updated.push(removed)
         }
    }
