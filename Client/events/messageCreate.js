@@ -25,7 +25,6 @@ export const data = {
                 payload.client.users[String(id)] = _user
             }
             const user = payload.client.users[String(id)]
-            console.log(`@${user.username}#${user.discriminator}`)
             payload.message.content = payload.message.content.replace(`<@${id}>`, (chalk.bgHex("#7289da")(`@${user.username}#${user.discriminator}`)))
         }
         // payload.message.content = marked(payload.message.content)
