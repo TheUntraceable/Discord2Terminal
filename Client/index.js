@@ -1,5 +1,6 @@
 import { Client } from "@theuntraceable/discord-rpc"
 import { REST } from "discord.js"
+import knex from "knex"
 import config from "../config.json" assert {type: "json"}
 import fs from "fs/promises"
 import settings from "./settings.json" assert {type: "json"}
@@ -9,6 +10,13 @@ const client = new Client({
     transport: "ipc"
 })
 
+const db = knex({
+    client: 'better-sqlite3', // or 'better-sqlite3'
+    connection: {
+      filename: "./mydb.sqlite"
+    }
+  });
+  
 client.settings = settings
 client.channels = {}
 client.commands = {}
