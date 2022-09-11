@@ -12,7 +12,7 @@ export const data = {
         let message = ""
         let lastAuthor = null
 
-        const selectedChannel = client.channels.get(String(channelNameToChannel[channel.channel].id))
+        const selectedChannel = await client.channels.get(String(channelNameToChannel[channel.channel].id))
 
         for(const cachedMessage of selectedChannel.created.sort((a, b) => a.id - b.id)) {
 

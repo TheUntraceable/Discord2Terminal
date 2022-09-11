@@ -32,14 +32,14 @@ export const data = {
             for(const channel of channels.filter(channel => [ChannelType.GuildVoice, ChannelType.GuildText].includes(channel.type))) {
 
                 if(payload.client.settings.ignoredChannels?.includes(channel.id)) {
-                    if(payload.client.channels.has(channel.id)) {
-                        payload.client.channels.delete(channel.id)
+                    if(await payload.client.channels.has(channel.id)) {
+                        await payload.client.channels.delete(channel.id)
                     }
                     continue
                 }
 
-                if(!payload.client.channels.has(channel.id)) {
-                    payload.client.channels.set(channel.id, {
+                if(!await payload.client.channels.has(channel.id)) {
+                    await payload.client.channels.set(channel.id, {
                         created: [],
                         updated: [],
                         deleted: []

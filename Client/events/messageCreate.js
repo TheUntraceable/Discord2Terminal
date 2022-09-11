@@ -17,6 +17,6 @@ export const data = {
         // payload.message.content = marked(payload.message.content)
         payload.message.content.replace("\n", `\n  `)
         payload.client.users.set(payload.message.author.id, payload.message.author)
-        payload.client.channels.push(`${payload.message.channel_id}.created`, payload.message)
+        await payload.client.channels.push(`${payload.message.channel_id}.created`, payload.message)
     }
 }
