@@ -10,7 +10,7 @@ marked.setOptions({
 export const data = {
     name: "MESSAGE_CREATE",
     async callback(payload) {
-        if(payload.client.settings.ignoredUsers.includes(payload.message.author.id)) return
+        if(payload.client.settings.ignoredUsers?.includes(payload.message.author.id)) return
         if(payload.client.settings.ignoredBlocked && payload.message.author.blocked) return
         if(!payload.message.content) return
         await parseMentions(payload)

@@ -11,7 +11,7 @@ export const data = {
     name: "MESSAGE_UPDATE",
     async callback(payload) {
         if(payload.client.settings.ignoredBlocked && payload.message.author.blocked) return
-        if(payload.client.settings.ignoredUsers.includes(payload.message.author.id)) return
+        if(payload.client.settings.ignoredUsers?.includes(payload.message.author.id)) return
         const channel = payload.client.channels.get(payload.channel_id)
         if(!channel) {
             await payload.client.channels.set(payload.channel_id, {

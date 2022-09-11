@@ -5,7 +5,7 @@ export const data = {
     name: "NOTIFICATION_CREATE",
     callback: async (payload) => {
         if(payload.message.author.system) return
-        if(payload.client.settings.ignoredUsers.includes(payload.message.author.id)) return
+        if(payload.client.settings.ignoredUsers?.includes(payload.message.author.id)) return
         if(payload.client.settings.ignoredBlocked && payload.message.author.blocked) return
         const message = payload.message
 

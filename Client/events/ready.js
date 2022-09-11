@@ -25,13 +25,13 @@ export const data = {
         const cachingSpinner = createSpinner("Caching channels...").start()
         for(const guild of payload.client.guilds) {
 
-            if(payload.client.settings.ignoredGuilds.includes(guild.id)) continue
+            if(payload.client.settings.ignoredGuilds?.includes(guild.id)) continue
 
             const channels = await payload.client.getChannels(guild.id)
 
             for(const channel of channels.filter(channel => [ChannelType.GuildVoice, ChannelType.GuildText].includes(channel.type))) {
 
-                if(payload.client.settings.ignoredChannels.includes(channel.id)) {
+                if(payload.client.settings.ignoredChannels?.includes(channel.id)) {
                     if(payload.client.channels.has(channel.id)) {
                         payload.client.channels.delete(channel.id)
                     }

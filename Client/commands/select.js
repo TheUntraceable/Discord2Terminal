@@ -17,7 +17,7 @@ export const data = {
         for(const cachedMessage of selectedChannel.created.sort((a, b) => a.id - b.id)) {
 
             if(client.settings.ignoreBlocked && cachedMessage.author.blocked) continue
-            if(client.settings.ignoreUsers.includes(cachedMessage.author.id)) continue
+            if(client.settings.ignoreUsers?.includes(cachedMessage.author.id)) continue
 
             let messageBlock = ""
 
