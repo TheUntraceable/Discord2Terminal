@@ -3,3 +3,4 @@ package-lock.json
 node_modules
 testing.js
 settings.json
+database.sqlite

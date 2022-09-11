@@ -4,11 +4,19 @@ import config from "../config.json" assert {type: "json"}
 import fs from "fs/promises"
 import settings from "./settings.json" assert {type: "json"}
 import { load } from "./utils/load.js"
-
+import { QuickDB, SqliteDriver } from "quick.db"
 
 const client = new Client({
     transport: "ipc"
 })
+
+client.db = new QuickDB({
+    driver: new SqliteDriver("./database.sqlite"),
+    filePath: "./database.sqlite"
+})
+
+client.channels = client.db.table("channels")
+client.users = client.db.table("users")
 
 client.settings = settings
 client.commands = {}
