@@ -1,4 +1,5 @@
 import { Client } from "@theuntraceable/discord-rpc"
+import { REST } from "discord.js"
 import config from "../config.json" assert {type: "json"}
 import fs from "fs/promises"
 import settings from "./settings.json" assert {type: "json"}
@@ -12,6 +13,7 @@ client.settings = settings
 client.channels = {}
 client.commands = {}
 client.users = {}
+client.rest = new REST({ version: "10" }).setToken(config.clientToken)
 
 client.addCommand = (name, callback) => {
     client.commands[name] = callback

@@ -44,7 +44,7 @@ export const data = {
 
             let messageBlock = ""
 
-            if(lastAuthor != cachedMessage.author.id) {
+            if(lastAuthor != cachedMessage.author?.id) {
                 messageBlock += chalk.hex(cachedMessage.author_color || "#FFFFFF11").underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})\n`)
                 lastAuthor = cachedMessage.author.id
             }
