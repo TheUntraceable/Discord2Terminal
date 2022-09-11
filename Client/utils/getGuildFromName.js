@@ -1,3 +1,5 @@
+import inquirer from "inquirer"
+
 export const getGuildFromName = async (client, guildString = "") => {
 
     const guilds = {}

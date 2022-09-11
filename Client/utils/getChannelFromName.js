@@ -1,3 +1,4 @@
+import inquirer from "inquirer"
 import { ChannelType } from "discord.js"
 
 export const getChannelFromName = async (client, guild, channelString = "", channelTypes = Object.values(ChannelType)) => {
