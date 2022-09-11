@@ -3,6 +3,7 @@ import ProgressBar from "progress"
 import parseCommands from "../utils/parseCommands.js"
 import fs from "fs/promises"
 import chalk from "chalk"
+import { ChannelType } from "discord.js"
 
 
 export const data = {
@@ -23,18 +24,33 @@ export const data = {
         
         const cachingSpinner = createSpinner("Caching channels...").start()
         for(const guild of payload.client.guilds) {
+
+            if(client.settings.ignoredGuilds.includes(guild.id)) continue
+
             const channels = await payload.client.getChannels(guild.id)
-            for(const channel of channels.filter(channel => channel.type == 0)) {
-                payload.client.channels[channel.id] = {
-                    created: [],
-                    updated: [],
-                    deleted: []
+
+            for(const channel of channels.filter(channel => [ChannelType.GuildVoice, ChannelType.GuildText].includes(channel.type))) {
+
+                if(client.settings.ignoredChannels.includes(channel.id)) {
+                    if(client.channels.has(channel.id)) {
+                        client.channels.delete(channel.id)
+                    }
+                    continue
+                }
+
+                if(!payload.client.channels.has(channel.id)) {
+                    payload.client.channels.set(channel.id, {
+                        created: [],
+                        updated: [],
+                        deleted: []
+                    })
                 }
             }
         }
         cachingSpinner.success({
             text: `Cached ${Object.keys(payload.client.channels).length} channels!`
         })
+
         console.log(chalk.green.underline(`Subscribing to events to Discord... (takes <1m)`))
 
         const subscriptionBar = new ProgressBar("[:bar] :rate subscriptions per second :percent done :etas :current/:total channels", { 
