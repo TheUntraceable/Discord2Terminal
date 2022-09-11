@@ -10,17 +10,26 @@ const client = new Client({
     transport: "ipc"
 })
 
-const db = knex({
-    client: 'better-sqlite3', // or 'better-sqlite3'
+client.db = knex({
+    client: 'better-sqlite3',
     connection: {
-      filename: "./mydb.sqlite"
+        filename: "./messagesCache.sqlite"
     }
-  });
-  
+});
+
+client.db.schema.createTableIfNotExists("messages", table => {
+    table.string("channelId")
+    table.string("messageId")
+    table.json("message")
+})
+
+client.db.schema.createTableIfNotExists("users", table => {
+    table.string("id")
+    table.json("user")
+})
+
 client.settings = settings
-client.channels = {}
 client.commands = {}
-client.users = {}
 client.rest = new REST({ version: "10" }).setToken(config.clientToken)
 
 client.addCommand = (name, callback) => {
