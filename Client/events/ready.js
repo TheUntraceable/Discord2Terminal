@@ -48,19 +48,19 @@ export const data = {
             }
         }
         cachingSpinner.success({
-            text: `Cached ${payload.client.channels.all().length} channels!`
+            text: `Cached ${(await payload.client.channels.all()).length} channels!`
         })
 
         console.log(chalk.green.underline(`Subscribing to events to Discord... (takes <1m)`))
 
         const subscriptionBar = new ProgressBar("[:bar] :rate subscriptions per second :percent done :etas :current/:total channels", { 
-            total: payload.client.channels.all().length,
+            total: (await payload.client.channels.all()).length,
             complete: chalk.green("="),
             incomplete: chalk.red("-"),
             width: 50
         })
 
-        for(const channelId of Object.keys(payload.client.channels.all())) {
+        for(const channelId of payload.client.channels.all()) {
             await payload.client.subscribe("MESSAGE_CREATE", { channel_id: channelId })
             await payload.client.subscribe("MESSAGE_UPDATE", { channel_id: channelId })
             await payload.client.subscribe("MESSAGE_DELETE", { channel_id: channelId })
