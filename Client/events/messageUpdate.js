@@ -1,22 +1,25 @@
-import { marked } from 'marked';
-import TerminalRenderer from 'marked-terminal';
+// import { marked } from 'marked';
+// import TerminalRenderer from 'marked-terminal';
 
-marked.setOptions({
-    renderer: new TerminalRenderer()
-});
+// marked.setOptions({
+//     renderer: new TerminalRenderer()
+// });
 
 export const data = {
     name: "MESSAGE_UPDATE",
     async callback(payload) {
         const channel = payload.client.channels[payload.channel_id]
         if(!channel) return
-        if(payload.message.content) {
-            payload.message.content = marked(payload.message.content)
-        }
+
+        // if(payload.message.content) {
+        //     payload.message.content = marked(payload.message.content)
+        // }
+
         const message = channel.created.find(message => {
             if(!message) return false
             return message.id == payload.message.id
         })
+
         if(!message) {
             channel.created.push(message)
             return

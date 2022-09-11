@@ -16,7 +16,6 @@ export const data = {
             pushed = true
         }
 
-        
         const channel = payload.client.channels[message.channel_id]
 
         if(!pushed) channel.created.push(message)
