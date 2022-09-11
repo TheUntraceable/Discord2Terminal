@@ -1,6 +1,5 @@
 import { Client } from "@theuntraceable/discord-rpc"
 import { REST } from "discord.js"
-import knex from "knex"
 import config from "../config.json" assert {type: "json"}
 import fs from "fs/promises"
 import settings from "./settings.json" assert {type: "json"}
@@ -8,24 +7,6 @@ import { load } from "./utils/load.js"
 
 const client = new Client({
     transport: "ipc"
-})
-
-client.db = knex({
-    client: 'better-sqlite3',
-    connection: {
-        filename: "./messagesCache.sqlite"
-    }
-});
-
-client.db.schema.createTableIfNotExists("messages", table => {
-    table.string("channelId")
-    table.string("messageId")
-    table.json("message")
-})
-
-client.db.schema.createTableIfNotExists("users", table => {
-    table.string("id")
-    table.json("user")
 })
 
 client.settings = settings

@@ -1,8 +1,7 @@
 import chalk from "chalk"
 import { ChannelType } from "discord.js"
-import { getChannelFromName } from "../utils/getChannelFromName"
-import { getGuildFromName } from "../utils/getGuildFromName"
-
+import { getChannelFromName } from "../utils/getChannelFromName.js"
+import { getGuildFromName } from "../utils/getGuildFromName.js"
 export const data = {
     name: "join",
     async callback(client, guildString = "", channelString = "") {

@@ -1,5 +1,5 @@
-import { getGuildFromName } from "../utils/getGuildFromName"
-import { getChannelFromName } from "../utils/getChannelFromName"
+import { getGuildFromName } from "../utils/getGuildFromName.js"
+import { getChannelFromName } from "../utils/getChannelFromName.js"
 import chalk from "chalk"
 import { ChannelType } from "discord.js"
 
