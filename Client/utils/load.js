@@ -1,24 +1,27 @@
 import { createSpinner } from "nanospinner"
 import fs from "fs"
 
-export async function load(client) {
+const loadCommands = async client => {
     const commandSpinner = createSpinner("Loading commands...").start()
 
-    
     for(const file of fs.readdirSync("./commands")) {
         const spinner = createSpinner(`Loading command ${file}...`).start()
         const command = await import(`../commands/${file}`)
+
         client.addCommand(command.data.name, command.data.callback)
+
         spinner.success({
             text: `Loaded command ${file}!`
         })
     
     }
-    
+
     commandSpinner.success({
         text: `Loaded ${Object.keys(client.commands).length} commands!`
     })
-    
+}
+
+const loadEvents = async client => {
     const eventSpinner = createSpinner("Loading events...").start()
     let events = 0
     
@@ -38,5 +41,10 @@ export async function load(client) {
     
     eventSpinner.success({
         text: `Loaded ${events} events!`
-    })    
+    })
+}
+
+export async function load(client) {
+    await loadCommands(client)
+    await loadEvents(client)
 }
