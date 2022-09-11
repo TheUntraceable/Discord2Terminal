@@ -48,7 +48,7 @@ client.login(loginOptions).catch(async () => {
     if(loginOptions.accessToken) {
         delete client.settings.token
         delete loginOptions.accessToken
-        await fs.writeFile("./settings.json/", JSON.stringify(client.settings, null, 4))
+        await fs.writeFile("./settings.json", JSON.stringify(client.settings, null, 4),)
         client.login(loginOptions)
     }
 })
