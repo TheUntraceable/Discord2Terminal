@@ -9,6 +9,11 @@ export const data = {
             guilds[guild.name] = guild
         }
 
+        if(!Object.keys(guilds).filter(guild => guild.toLowerCase().includes(guildString.toLowerCase()))) {
+            console.log(chalk.red("Invalid guild!"))
+            return
+        }
+
         const answer = await inquirer.prompt({
             type: "list",
             name: "guild",
@@ -29,7 +34,11 @@ export const data = {
         for(const channel of channels) {
             channelNameToChannel[channel.name.toLowerCase()] = channel
         }
-    
+        if(!channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase())).map(channel => channel.name)) {
+            console.log(chalk.red("Invalid channel!"))
+            return
+        }
+
         const channel = await inquirer.prompt({
             type: "list",
             name: "channel",
