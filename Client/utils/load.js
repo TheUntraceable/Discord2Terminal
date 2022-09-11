@@ -4,11 +4,6 @@ import fs from "fs"
 export async function load(client) {
     const commandSpinner = createSpinner("Loading commands...").start()
 
-    client.addCommand("cls", async () => {
-        console.clear()
-    }).addCommand("clear", async () => {
-        console.clear()
-    })
     
     for(const file of fs.readdirSync("./commands")) {
         const spinner = createSpinner(`Loading command ${file}...`).start()
