@@ -11,6 +11,7 @@ export const data = {
     name: "MESSAGE_CREATE",
     async callback(payload) {
         if(!payload.message.content) return
+        if(payload.client.settings.ignoredUsers.includes(payload.message.author.id)) return
         await parseMentions(payload)
         // payload.message.content = marked(payload.message.content)
         payload.message.content.replace("\n", `\n  `)
