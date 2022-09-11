@@ -18,7 +18,7 @@ export const data = {
             type: "list",
             name: "guild",
             message: "Select a guild",
-            choices: Object.keys(guilds).filter(guild => guild.toLowerCase().includes(guildString.toLowerCase()))
+            choices: Object.keys(guilds).filter(guild => guild.toLowerCase().includes(guildString.toLowerCase()) && !client.settings.ignoredGuilds?.includes(guild.id))
         })
 
         const guild = guilds[answer.guild]
@@ -43,13 +43,15 @@ export const data = {
             type: "list",
             name: "channel",
             message: "Select a channel",
-            choices: channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase())).map(channel => channel.name)
+            choices: channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase()) && !client.settings.ignoredChannels?.includes(channel.id)).map(channel => channel.name)
         })
     
         let message = ""
         let lastAuthor = null
         const selectedChannel = client.channels[String(channelNameToChannel[channel.channel].id)]
         for(const cachedMessage of selectedChannel.created.sort((a, b) => a.id - b.id)) {
+            if(client.settings.ignoreBlocked && cachedMessage.author.blocked) continue
+            if(client.settings.ignoreUsers.includes(cachedMessage.author.id)) continue
 
             let messageBlock = ""
 
