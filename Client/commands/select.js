@@ -7,8 +7,8 @@ export const data = {
     name: "select",
     async callback(client, guildString = "", channelString = "") {
         const guild = await getGuildFromName(client, guildString)
-        await getChannelFromName(client, guild, channelString, [ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.PublicThread])
-
+        const channel = await getChannelFromName(client, guild, channelString, [ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.PublicThread])
+        console.log(channel)
         let message = ""
         let lastAuthor = null
 

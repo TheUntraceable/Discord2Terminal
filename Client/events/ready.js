@@ -60,10 +60,13 @@ export const data = {
             width: 50
         })
 
-        for(const channelId of payload.client.channels.all()) {
-            await payload.client.subscribe("MESSAGE_CREATE", { channel_id: channelId })
-            await payload.client.subscribe("MESSAGE_UPDATE", { channel_id: channelId })
-            await payload.client.subscribe("MESSAGE_DELETE", { channel_id: channelId })
+        for(const channel of await payload.client.channels.all()) {
+            if(!channel.id) continue
+            if(payload.client.settings.ignoredChannels?.includes(channel.id)) continue
+
+            await payload.client.subscribe("MESSAGE_CREATE", { channel_id: channel.id })
+            await payload.client.subscribe("MESSAGE_UPDATE", { channel_id: channel.id })
+            await payload.client.subscribe("MESSAGE_DELETE", { channel_id: channel.id })
 
             subscriptionBar.tick()
             subscribed++

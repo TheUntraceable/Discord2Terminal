@@ -2,6 +2,7 @@ import { Routes } from 'discord.js';
 import chalk from 'chalk';
 
 export default async payload => {
+    if(!payload.message.content) return
     for(const word of payload.message.content.split(" ")) {
         const matches = word.matchAll('<@!?([0-9]{15,20})>$').next().value;
     

@@ -1,4 +1,5 @@
 import inquirer from "inquirer"
+import chalk from "chalk"
 
 export default async client => {
     const answer = await inquirer.prompt({
