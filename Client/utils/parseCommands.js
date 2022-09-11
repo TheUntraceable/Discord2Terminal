@@ -1,6 +1,6 @@
 import inquirer from "inquirer"
 
-export const parseCommands = async client => {
+export default async client => {
     const answer = await inquirer.prompt({
         type: "input",
         name: "command",

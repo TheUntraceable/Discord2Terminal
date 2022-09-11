@@ -1,6 +1,6 @@
 import { createSpinner } from "nanospinner"
 import ProgressBar from "progress"
-import parseCommands from "../utils/parseCommands"
+import parseCommands from "../utils/parseCommands.js"
 import fs from "fs/promises"
 import chalk from "chalk"
 

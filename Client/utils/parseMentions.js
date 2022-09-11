@@ -1,7 +1,7 @@
 import { Routes } from 'discord.js';
 import chalk from 'chalk';
 
-export const parseMentions = async payload => {
+export default async payload => {
     for(const word of payload.message.content.split(" ")) {
         const matches = word.matchAll('<@!?([0-9]{15,20})>$').next().value;
     

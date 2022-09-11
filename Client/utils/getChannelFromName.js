@@ -1,7 +1,7 @@
 import inquirer from "inquirer"
 import { ChannelType } from "discord.js"
 
-export const getChannelFromName = async (client, guild, channelString = "", channelTypes = Object.values(ChannelType)) => {
+export default async (client, guild, channelString = "", channelTypes = Object.values(ChannelType)) => {
     const channels = (await client.getChannels(guild.id))
     const channelNameToChannel = {}
     

@@ -1,5 +1,5 @@
 import chalk from "chalk"
-import parseMentions from "../utils/parseMentions"
+import parseMentions from "../utils/parseMentions.js"
 
 export const data = {
     name: "NOTIFICATION_CREATE",

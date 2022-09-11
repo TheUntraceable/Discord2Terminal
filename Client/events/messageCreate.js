@@ -1,6 +1,6 @@
 import { marked } from 'marked';
 import TerminalRenderer from 'marked-terminal';
-import { parseMentions } from '../utils/parseMentions';
+import parseMentions from '../utils/parseMentions.js';
 
 marked.setOptions({
     renderer: new TerminalRenderer(),
