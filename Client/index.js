@@ -5,6 +5,7 @@ import fs from "fs/promises"
 import settings from "./settings.json" assert {type: "json"}
 import { load } from "./utils/load.js"
 
+
 const client = new Client({
     transport: "ipc"
 })
