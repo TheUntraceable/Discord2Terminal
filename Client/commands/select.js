@@ -7,13 +7,14 @@ export const data = {
     name: "select",
     async callback(client, guildString = "", channelString = "") {
         const guild = await getGuildFromName(client, guildString)
-        const channel = await getChannelFromName(client, guild, channelString, [ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.PublicThread])
-        console.log(channel)
+        const channelName = await getChannelFromName(client, guild, channelString, [ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.PublicThread])
+
         let message = ""
         let lastAuthor = null
-
-        const selectedChannel = await client.channels.get(String(channelNameToChannel[channel.channel].id))
-
+        const selectedChannel = (await client.channels.all()).filter(channel => {
+            return channel.value.name?.toLowerCase() == channelName.toLowerCase()
+        })[0].value
+        console.log(selectedChannel.created)
         for(const cachedMessage of selectedChannel.created.sort((a, b) => a.id - b.id)) {
 
             if(client.settings.ignoreBlocked && cachedMessage.author.blocked) continue

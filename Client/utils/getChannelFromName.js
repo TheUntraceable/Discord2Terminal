@@ -20,5 +20,5 @@ export default async (client, guild, channelString = "", channelTypes = Object.v
         message: "Select a channel",
         choices: channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase()) && !client.settings.ignoredChannels?.includes(channel.id)).map(channel => channel.name)
     })
-    return channel
+    return channel.channel
 }
