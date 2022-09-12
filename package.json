@@ -40,7 +40,6 @@
     "marked-terminal": "^5.1.1",
     "mongodb": "^4.9.0",
     "nanospinner": "^1.1.0",
-    "progress": "^2.0.3",
     "quick.db": "^9.0.6"
   }
 }

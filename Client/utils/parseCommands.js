@@ -1,7 +1,7 @@
 import inquirer from "inquirer"
 import chalk from "chalk"
 
-export default async client => {
+const parseCommands = async client => {
     const answer = await inquirer.prompt({
         type: "input",
         name: "command",
@@ -24,3 +24,5 @@ export default async client => {
     })
     return await parseCommands(client)
 }
+
+export default parseCommands

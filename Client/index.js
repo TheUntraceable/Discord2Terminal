@@ -29,7 +29,7 @@ client.addCommand = (name, callback) => {
 
 client.captureRejections = true
 
-load(client)
+await load(client)
 
 const loginOptions = {
     clientId: config.clientId,
@@ -47,6 +47,7 @@ if(client.settings.token) {
 client.login(loginOptions).then(() => {
     console.log("Logged in!")
 }).catch(async () => {
+    console.log("Failed to login, retrying...")
     if(loginOptions.accessToken) {
         delete client.settings.token
         delete loginOptions.accessToken

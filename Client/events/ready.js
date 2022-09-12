@@ -1,5 +1,4 @@
 import { createSpinner } from "nanospinner"
-import ProgressBar from "progress"
 import parseCommands from "../utils/parseCommands.js"
 import fs from "fs/promises"
 import chalk from "chalk"
@@ -30,7 +29,7 @@ export const data = {
             const channels = await payload.client.getChannels(guild.id)
 
             for(const channel of channels.filter(channel => [ChannelType.GuildVoice, ChannelType.GuildText].includes(channel.type))) {
-
+                if(!channel.id) return
                 if(payload.client.settings.ignoredChannels?.includes(channel.id)) {
                     if(await payload.client.channels.has(channel.id)) {
                         await payload.client.channels.delete(channel.id)
@@ -51,27 +50,26 @@ export const data = {
             text: `Cached ${(await payload.client.channels.all()).length} channels!`
         })
 
-        console.log(chalk.green.underline(`Subscribing to events to Discord... (takes <1m)`))
-
-        const subscriptionBar = new ProgressBar("[:bar] :rate subscriptions per second :percent done :etas :current/:total channels", { 
-            total: (await payload.client.channels.all()).length,
-            complete: chalk.green("="),
-            incomplete: chalk.red("-"),
-            width: 50
-        })
-
         for(const channel of await payload.client.channels.all()) {
-            if(!channel.id) continue
+            if(!channel.id) {
+                console.log(channel)
+                continue
+            }
+            if(!channel) {
+                console.log(channel)
+                continue
+            }
             if(payload.client.settings.ignoredChannels?.includes(channel.id)) continue
-
-            await payload.client.subscribe("MESSAGE_CREATE", { channel_id: channel.id })
-            await payload.client.subscribe("MESSAGE_UPDATE", { channel_id: channel.id })
-            await payload.client.subscribe("MESSAGE_DELETE", { channel_id: channel.id })
-
-            subscriptionBar.tick()
+            try {
+                payload.client.subscribe("MESSAGE_CREATE", { channel_id: channel.id }).catch(console.error)
+                payload.client.subscribe("MESSAGE_UPDATE", { channel_id: channel.id }).catch(console.error)
+                payload.client.subscribe("MESSAGE_DELETE", { channel_id: channel.id }).catch(console.error)
+            } catch(error) {
+                console.error(error)
+                await payload.client.channels.delete(channel.id)
+            }
             subscribed++
         }
-        subscriptionBar.terminate()
  
         console.log(chalk.green.underline(`Subscribed to MESSAGE_CREATE/UPDATE/DELETE in ${subscribed} channels!`))
         await parseCommands(payload.client)
