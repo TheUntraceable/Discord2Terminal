@@ -9,12 +9,15 @@ export const data = {
     name: "ready",
     async callback(payload) {
 
-        payload.client.settings.token = {
-            expiresAt: new Date(payload.expires),
-            accessToken: payload.client.accessToken
+        if(payload.client.accessToken) {
+            payload.client.settings.token = {
+                expiresAt: new Date(payload.expires),
+                accessToken: payload.client.accessToken
+            }
+    
+            await fs.writeFile("./settings.json", JSON.stringify(payload.client.settings, null, 4))
         }
 
-        await fs.writeFile("./settings.json", JSON.stringify(payload.client.settings, null, 4))
         payload.client.subscribe("NOTIFICATION_CREATE")
         
         const guilds = await payload.client.getGuilds()
