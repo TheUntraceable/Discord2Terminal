@@ -13,10 +13,21 @@ export const data = {
         if(payload.client.settings.ignoredUsers?.includes(payload.message.author.id)) return
         if(payload.client.settings.ignoredBlocked && payload.message.author.blocked) return
         if(!payload.message.content) return
+
+        if(!await payload.client.channels.get(payload.channel_id)) {
+            const channel = await payload.client.getChannel(payload.channel_id)
+            await payload.client.channels.set(payload.channel_id, {
+                name: channel.name,
+                created: [],
+                updated: [],
+                deleted: []
+            })
+        }
+
         await parseMentions(payload)
         // payload.message.content = marked(payload.message.content)
         payload.message.content.replace("\n", `\n  `)
-        payload.client.users.set(payload.message.author.id, payload.message.author)
+        await payload.client.users.set(payload.message.author.id, payload.message.author)
         await payload.client.channels.push(`${payload.message.channel_id}.created`, payload.message)
     }
 }

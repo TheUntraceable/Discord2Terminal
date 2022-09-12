@@ -45,7 +45,6 @@ if(client.settings.token) {
 }
 
 client.login(loginOptions).catch(async () => {
-    console.log("Failed to login, retrying...")
     if(loginOptions.accessToken) {
         delete client.settings.token
         delete loginOptions.accessToken
