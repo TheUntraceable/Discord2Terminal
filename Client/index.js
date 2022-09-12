@@ -3,7 +3,7 @@ import { REST } from "discord.js"
 import config from "../config.json" assert {type: "json"}
 import fs from "fs/promises"
 import settings from "./settings.json" assert {type: "json"}
-import { load } from "./utils/load.js"
+import load from "./utils/load.js"
 import { QuickDB, SqliteDriver } from "quick.db"
 
 const client = new Client({
@@ -29,7 +29,7 @@ client.addCommand = (name, callback) => {
 
 client.captureRejections = true
 
-await load(client)
+load(client)
 
 const loginOptions = {
     clientId: config.clientId,
@@ -44,11 +44,12 @@ if(client.settings.token) {
     }
 }
 
-client.login(loginOptions).catch(async () => {
+client.login(loginOptions).then(() => {
+    console.log("Logged in!")
+}).catch(async () => {
     if(loginOptions.accessToken) {
         delete client.settings.token
         delete loginOptions.accessToken
-        await fs.writeFile("./settings.json", JSON.stringify(client.settings, null, 4),)
-        client.login(loginOptions)
+        await fs.writeFile("./settings.json", JSON.stringify(client.settings, null, 4))
     }
 })

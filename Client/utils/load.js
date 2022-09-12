@@ -44,7 +44,7 @@ const loadEvents = async client => {
     })
 }
 
-export async function load(client) {
+export default async function(client) {
     await loadCommands(client)
     await loadEvents(client)
 }
