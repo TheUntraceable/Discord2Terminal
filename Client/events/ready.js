@@ -53,7 +53,7 @@ export const data = {
         }
 
         subscribedBar.terminate()
-        console.log(chalk.green.underline(`Attempted to subscribe to MESSAGE_CREATE/UPDATE/DELETE in ${subscribed} channels!`))
+        console.log(chalk.green.underline(`Subscribed to MESSAGE_CREATE/UPDATE/DELETE in ${subscribed} channels!`))
  
         await parseCommands(payload.client)
     }
