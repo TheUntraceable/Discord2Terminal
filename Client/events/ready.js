@@ -16,7 +16,7 @@ export const data = {
     
             await fs.writeFile("./settings.json", JSON.stringify(payload.client.settings, null, 4))
         }
-
+        
         payload.client.subscribe("NOTIFICATION_CREATE")
 
         const guilds = await payload.client.getGuilds()
@@ -55,7 +55,6 @@ export const data = {
         subscribedBar.update(1)
         subscribedBar.terminate()
         console.log(chalk.green.underline(`Subscribed to MESSAGE_CREATE/UPDATE/DELETE in ${subscribed} channels!`))
- 
         await parseCommands(payload.client)
     }
 }

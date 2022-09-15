@@ -43,9 +43,13 @@ export const data = {
             channel.created.push(message)
         } else {
             const index = channel.created.indexOf(message)
-            const removed = channel.created.splice(index, 1)[0]
+            if(index === -1) {
+                channel.created.push(message)
+            } else {
+                const removed = channel.created.splice(index, 1)[0]
+                channel.updated.push(removed)
+            }
             channel.created.push(message)
-            channel.updated.push(removed)
         }
         await payload.client.channels.set(payload.channel_id, channel)
    }
