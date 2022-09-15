@@ -25,7 +25,7 @@ export const data = {
         }
         
         const channel = await payload.client.channels.get(payload.channel_id)
-        await filterEmpty(paylaod.client, payload.channel_id, channel)
+        await filterEmpty(payload.client, payload.channel_id, channel)
 
         // if(payload.message.content) {
         //     payload.message.content = marked(payload.message.content)
