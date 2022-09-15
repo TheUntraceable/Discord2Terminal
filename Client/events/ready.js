@@ -52,6 +52,7 @@ export const data = {
                 console.error(error)
             }
         }
+        subscribedBar.update(1)
         subscribedBar.terminate()
         console.log(chalk.green.underline(`Subscribed to MESSAGE_CREATE/UPDATE/DELETE in ${subscribed} channels!`))
  

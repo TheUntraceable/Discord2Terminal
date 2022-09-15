@@ -1,5 +1,6 @@
 import chalk from "chalk"
 import parseMentions from "../utils/parseMentions.js"
+import filterEmpty from "../utils/filterEmpty.js"
 
 export const data = {
     name: "NOTIFICATION_CREATE",
@@ -18,6 +19,7 @@ export const data = {
         }
 
         const channel = await payload.client.channels.get(String(message.channel_id))
+        await filterEmpty(payload.channel_id, channel)
 
         await parseMentions(payload)
 

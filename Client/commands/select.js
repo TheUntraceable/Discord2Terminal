@@ -6,15 +6,17 @@ import { ChannelType } from "discord.js"
 export const data = {
     name: "select",
     async callback(client, guildString = "", channelString = "") {
+
         const guild = await getGuildFromName(client, guildString)
-        const channelName = await getChannelFromName(client, guild, channelString, [ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.PublicThread])
+        const channel = await getChannelFromName(client, guild, channelString, [ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.PublicThread])
+
+        if(!channel) return
 
         let message = ""
         let lastAuthor = null
-        const selectedChannel = (await client.channels.all()).filter(channel => {
-            return channel.value.name?.toLowerCase() == channelName.toLowerCase()
-        })[0].value
+        const selectedChannel = await client.channels.get(channel.id)
 
+        if(!selectedChannel) return
         for(const cachedMessage of selectedChannel.created.sort((a, b) => a.id - b.id)) {
 
             if(client.settings.ignoreBlocked && cachedMessage.author.blocked) continue

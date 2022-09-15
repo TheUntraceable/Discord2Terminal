@@ -1,3 +1,4 @@
+import filterEmpty from "../utils/filterEmpty.js"
 // import { marked } from 'marked';
 // import TerminalRenderer from 'marked-terminal';
 
@@ -24,9 +25,12 @@ export const data = {
         }
         
         const channel = await payload.client.channels.get(payload.channel_id)
+        await filterEmpty(payload.channel_id, channel)
+
         // if(payload.message.content) {
         //     payload.message.content = marked(payload.message.content)
         // }
+
         await parseMentions(payload)
 
         const message = channel.created.find(message => {
@@ -43,5 +47,6 @@ export const data = {
             channel.created.push(message)
             channel.updated.push(removed)
         }
+        await payload.client.channels.set(payload.channel_id, channel)
    }
 }
