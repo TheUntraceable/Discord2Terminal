@@ -12,15 +12,18 @@ export const data = {
     async callback(payload) {
         if(payload.client.settings.ignoredBlocked && payload.message.author.blocked) return
         if(payload.client.settings.ignoredUsers?.includes(payload.message.author.id)) return
-        const channel = await payload.client.channels.get(String(payload.channel_id))
-        if(!channel) {
+
+        if(!await payload.client.channels.has(payload.channel_id)) {
+            const channel = await payload.client.getChannel(payload.channel_id)
             await payload.client.channels.set(payload.channel_id, {
+                name: channel.name,
                 created: [],
                 updated: [],
                 deleted: []
             })
         }
-
+        
+        const channel = await payload.client.channels.get(payload.channel_id)
         // if(payload.message.content) {
         //     payload.message.content = marked(payload.message.content)
         // }
@@ -31,7 +34,7 @@ export const data = {
             return message.id == payload.message.id
         })
         
-        
+
         if(!message) {
             channel.created.push(message)
         } else {
