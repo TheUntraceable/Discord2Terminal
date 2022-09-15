@@ -25,14 +25,13 @@ export const data = {
         const channels = []
 
         for(const guild of guilds.guilds) {
-            await payload.client.subscribe("GUILD_STATUS",  {guild_id: guild.id })
             const guildChannels = await payload.client.getChannels(guild.id)
             for(const channel of guildChannels) {
                 channels.push(channel)
             }
         }
 
-        const subscribedBar = new ProgressBar("Subscribing to events... [ :bar ] :percent complete :etas remaining...", {
+        const subscribedBar = new ProgressBar("Subscribing to events... [ :bar ] :current/:total :percent complete :etas remaining...", {
             complete: chalk.green("="),
             incomplete: chalk.red(" "),
             width: 25,

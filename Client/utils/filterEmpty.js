@@ -1,8 +1,9 @@
+const filterFunction = message => true
+
 export default async (client, channelId, channel) => {
-    channel.created.filter(Boolean)
-    channel.updated.filter(Boolean)
-    channel.deleted.filter(Boolean)
+    channel.created.filter(filterFunction)
+    channel.updated.filter(filterFunction)
+    channel.deleted.filter(filterFunction)
     await client.channels.set(channelId, channel)
-    const newChannel = await client.channels.get(channelId)
-    return newChannel
+    return await client.channels.get(channelId)
 }
