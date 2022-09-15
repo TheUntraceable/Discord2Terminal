@@ -30,7 +30,7 @@ export const data = {
         await parseMentions(payload)
         // await payload.client.channels.push(`${payload.message.channel_id}.created`, payload.message)
         const channel = await payload.client.channels.get(payload.channel_id)
-        await filterEmpty(payload.channel_id, channel)
+        await filterEmpty(payload.client, payload.channel_id, channel)
         channel.created.push(payload.message)
         await payload.client.channels.set(payload.channel_id, channel)
     }

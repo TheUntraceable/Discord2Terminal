@@ -19,7 +19,7 @@ export const data = {
         }
 
         const channel = await payload.client.channels.get(String(message.channel_id))
-        await filterEmpty(payload.channel_id, channel)
+        await filterEmpty(payload.client, payload.channel_id, channel)
 
         await parseMentions(payload)
 

@@ -1,4 +1,4 @@
-export default async (channelId, channel) => {
+export default async (client, channelId, channel) => {
     channel.created.filter(Boolean)
     channel.updated.filter(Boolean)
     channel.deleted.filter(Boolean)
