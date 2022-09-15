@@ -25,6 +25,7 @@ export const data = {
         const channels = []
 
         for(const guild of guilds.guilds) {
+            await payload.client.subscribe("GUILD_STATUS",  {guild_id: guild.id })
             const guildChannels = await payload.client.getChannels(guild.id)
             for(const channel of guildChannels) {
                 channels.push(channel)
