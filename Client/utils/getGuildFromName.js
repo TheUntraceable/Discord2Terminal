@@ -23,7 +23,7 @@ export default async (client, guildString = "") => {
     const guild = guilds[answer.guild]
 
     if(!guild) {
-        console.log(chalk.red("Failed to get channels. Guild may not exist"))
+        console.log(chalk.red("Failed to get guild. Guild may not exist"))
         return
     }
     return guild

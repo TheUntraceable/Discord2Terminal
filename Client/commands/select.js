@@ -14,6 +14,8 @@ export const data = {
         const selectedChannel = (await client.channels.all()).filter(channel => {
             return channel.value.name?.toLowerCase() == channelName.toLowerCase()
         })[0].value
+        console.log(selectedChannel)
+
         for(const cachedMessage of selectedChannel.created.sort((a, b) => a.id - b.id)) {
 
             if(client.settings.ignoreBlocked && cachedMessage.author.blocked) continue

@@ -14,7 +14,7 @@ export const data = {
         if(payload.client.settings.ignoredBlocked && payload.message.author.blocked) return
         if(!payload.message.content) return
 
-        if(!await payload.client.channels.get(payload.channel_id)) {
+        if(!await payload.client.channels.get(String(payload.channel_id))) {
             const channel = await payload.client.getChannel(payload.channel_id)
             await payload.client.channels.set(payload.channel_id, {
                 name: channel.name,
@@ -28,6 +28,9 @@ export const data = {
         // payload.message.content = marked(payload.message.content)
         payload.message.content.replace("\n", `\n  `)
         await payload.client.users.set(payload.message.author.id, payload.message.author)
-        await payload.client.channels.push(`${payload.message.channel_id}.created`, payload.message)
+        // await payload.client.channels.push(`${payload.message.channel_id}.created`, payload.message)
+        const channel = await payload.client.channels.get(String(payload.channel_id))
+        channel.created.push(payload.message)
+        await payload.client.channels.set(payload.channel_id, channel)
     }
 }

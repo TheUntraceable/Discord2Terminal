@@ -8,7 +8,6 @@ import { ChannelType } from "discord.js"
 export const data = {
     name: "ready",
     async callback(payload) {
-
         if(payload.client.accessToken) {
             payload.client.settings.token = {
                 expiresAt: new Date(payload.expires),
@@ -23,35 +22,36 @@ export const data = {
         const guilds = await payload.client.getGuilds()
         payload.client.guilds = guilds.guilds
 
+        const channels = []
+
+        for(const guild of guilds.guilds) {
+            const guildChannels = await payload.client.getChannels(guild.id)
+            for(const channel of guildChannels) {
+                channels.push(channel)
+            }
+        }
+
         const subscribedBar = new ProgressBar("Subscribing to channels [ :bar ] :percent complete :etas remaining...", {
             complete: chalk.green("="),
             incomplete: chalk.red(" "),
             width: 25,
-            total: (await payload.client.channels.all()).length
+            total: channels.length
         })
 
         let subscribed = 0
 
-        for(const guild of payload.client.guilds) {
-
-            if(payload.client.settings.ignoredGuilds?.includes(guild.id)) continue
-
-            const channels = await payload.client.getChannels(guild.id)
-
-            for(const channel of channels.filter(channel => [ChannelType.GuildVoice, ChannelType.GuildText].includes(channel.type))) {
-                if(payload.client.settings.ignoredChannels?.includes(channel.id)) continue
-                try {
-                    await payload.client.subscribe("MESSAGE_CREATE", { channel_id: channel.id })
-                    await payload.client.subscribe("MESSAGE_UPDATE", { channel_id: channel.id })
-                    await payload.client.subscribe("MESSAGE_DELETE", { channel_id: channel.id })
-                } catch(error) {
-                    console.error(error)
-                }
+        for(const channel of channels.filter(channel => [ChannelType.GuildVoice, ChannelType.GuildText].includes(channel.type))) {
+            if(payload.client.settings.ignoredChannels?.includes(channel.id)) continue
+            try {
+                await payload.client.subscribe("MESSAGE_CREATE", { channel_id: channel.id })
+                await payload.client.subscribe("MESSAGE_UPDATE", { channel_id: channel.id })
+                await payload.client.subscribe("MESSAGE_DELETE", { channel_id: channel.id })
+                subscribed++
                 subscribedBar.tick()
-                subscribed++    
+            } catch(error) {
+                console.error(error)
             }
         }
-
         subscribedBar.terminate()
         console.log(chalk.green.underline(`Subscribed to MESSAGE_CREATE/UPDATE/DELETE in ${subscribed} channels!`))
  
