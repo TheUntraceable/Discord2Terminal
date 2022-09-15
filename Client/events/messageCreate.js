@@ -22,8 +22,6 @@ export const data = {
                 updated: [],
                 deleted: []
             })
-        } else {
-            console.log(await payload.client.channels.get(String(payload.channel_id)))
         }
 
         await parseMentions(payload)
