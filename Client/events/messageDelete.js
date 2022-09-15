@@ -17,7 +17,7 @@ export const data = {
         
         const channel = await payload.client.channels.get(String(payload.channel_id))
         await filterEmpty(payload.client, payload.channel_id, channel)
-        if(!channel.created.find(message => message.id == payload.message.id)) return
+        if(!channel.created.find(message => message?.id == payload.message.id)) return
 
         if(!channel) {
             await payload.client.channels.set(payload.channel_id, {
