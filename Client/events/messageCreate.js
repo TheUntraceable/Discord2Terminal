@@ -14,6 +14,11 @@ export const data = {
         if(payload.client.settings.ignoredUsers?.includes(payload.message.author.id)) return
         if(payload.client.settings.ignoredBlocked && payload.message.author.blocked) return
         if(!payload.message.content) return
+        if(!payload.author) return
+        if(!payload.message.id) {
+            console.log("Message ID not found, if this is frequent, reboot. If it persists, restart Discord.")
+            return
+        }
         if(!await payload.client.channels.has(payload.channel_id)) {
             const channel = await payload.client.getChannel(payload.channel_id)
             await payload.client.channels.set(payload.channel_id, {
@@ -23,6 +28,7 @@ export const data = {
                 deleted: []
             })
         }
+
         
         // payload.message.content = marked(payload.message.content)
         payload.message.content.replace("\n", `\n  `)
