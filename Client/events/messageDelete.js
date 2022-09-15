@@ -1,4 +1,4 @@
-import filterEmpty from "../utils/filterEmpty"
+import filterEmpty from "../utils/filterEmpty.js";
 export const data = {
     name: "MESSAGE_DELETE",
     async callback(payload) {
