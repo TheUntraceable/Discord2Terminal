@@ -18,7 +18,7 @@ export const data = {
         }
 
         payload.client.subscribe("NOTIFICATION_CREATE")
-        
+
         const guilds = await payload.client.getGuilds()
         payload.client.guilds = guilds.guilds
 
@@ -31,7 +31,7 @@ export const data = {
             }
         }
 
-        const subscribedBar = new ProgressBar("Subscribing to channels [ :bar ] :percent complete :etas remaining...", {
+        const subscribedBar = new ProgressBar("Subscribing to events... [ :bar ] :percent complete :etas remaining...", {
             complete: chalk.green("="),
             incomplete: chalk.red(" "),
             width: 25,
