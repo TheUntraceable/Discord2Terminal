@@ -1,4 +1,4 @@
-const filterFunction = message => true
+const filterFunction = message => message !== undefined && message !== null
 
 export default async (client, channelId, channel) => {
     channel.created.filter(filterFunction)
