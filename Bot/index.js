@@ -4,6 +4,7 @@ import { MongoClient } from 'mongodb';
 import WebhookManager from ("./webhookClient")
 import express from "express"
 import config from "../config.json" assert {type: "json"}
+import got from "got";
 
 const client = new Client({intents: [IntentsBitField.Flags.Guilds]});
 const app = express()
@@ -118,6 +119,7 @@ client.on("ready", async () => {
 })
 
 app.ratelimits = {}
+app.users = {}
 
 const checkRatelimits = async (req, res) => {
     if(!app.ratelimits[req.ip]) {
@@ -129,26 +131,39 @@ const checkRatelimits = async (req, res) => {
         }
     }
 
-    app.ratelimits[req.ip].count++
-
+    
     if(app.ratelimits[req.ip].count >= 5) {
         res.status(429).send("You are being ratelimited!")
         return false
     }
-
+    app.ratelimits[req.ip].count++
+    
     return true
     
 }
 
 app.post("/channels/:channelId", checkRatelimits, async (req, res) => {
     const dbEntry = await client.db.webhooks.findOne({channelId: req.params.channelId})
-    
+    if(!req.headers.authorization) return res.status(401).send("No authorization header provided!")
+    if(!app.users[req.headers.authorization]) {
+        const userData = await got.get("https://discord.com/api/v9/users/@me", {
+            headers: {
+                authorization: `Bearer ${req.headers.authorization}`
+            },
+            throwHttpErrors: false
+        }).json()
+        if(!userData) return res.status(401).send("Invalid authorization token provided!")
+        app.users[req.headers.authorization] = userData
+    }
+
+    const user = app.users[req.headers.authorization]
+
     if(!dbEntry || !dbEntry.webhooks) return res.status(404).json({
         error: "No webhooks found for this channel!"
     })
     const manager = client.webhookManagers[req.params.channelId] || new WebhookManager(dbEntry.webhooks)
     client.webhookManagers[req.params.channelId] = manager
-    const data = await manager.execute(await manager.findAvailableWebhook(), req.body.message, {username: req.body.username, avatar: req.body.avatar_url})
+    const data = await manager.execute(await manager.findAvailableWebhook(), req.body.message, {username: user.username, avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`})
     res.status(200).json(data)
 })
 
