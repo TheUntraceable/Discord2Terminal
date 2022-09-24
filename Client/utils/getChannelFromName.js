@@ -1,7 +1,7 @@
 import inquirer from "inquirer"
 import { ChannelType } from "discord.js"
 
-export default async (client, guild, channelString = "", channelTypes = Object.values(ChannelType)) => {
+export default async (client, guild, channelString = "") => {
     if(!guild) return
     const channelNameToChannel = {}
     
@@ -11,7 +11,7 @@ export default async (client, guild, channelString = "", channelTypes = Object.v
         channelNameToChannel[channel.name] = channel
     }
 
-    if(!channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase()) && !client.settings.ignoredChannels?.includes(channel.id) && channelTypes.includes(channel.type)).map(channel => channel.name)) {
+    if(!channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase()) && !client.settings.ignoredChannels?.includes(channel.id)).map(channel => channel.name)) {
         console.log(chalk.red("Invalid channel!"))
         return
     }

@@ -32,7 +32,7 @@ export const data = {
             complete: chalk.green("="),
             incomplete: chalk.red("-"),
             width: 25,
-            total: channels.length
+            total: channels.filter(channel => [ChannelType.GuildVoice, ChannelType.GuildText].includes(channel.type)).length
         })
 
         let subscribed = 0

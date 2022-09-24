@@ -10,7 +10,7 @@ export const data = {
         if(payload.client.settings.ignoreBlocked && payload.message.author.blocked) return
         const message = payload.message
 
-        if(!await payload.client.channels.has(message.channel_id)) {
+        if(!await payload.client.channels.has(String(message.channel_id))) {
             try {
                 const channel = await payload.client.getChannel(message.channel_id)
                 await payload.client.channels.set(message.channel_id, {

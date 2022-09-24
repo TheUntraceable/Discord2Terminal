@@ -13,12 +13,14 @@ export const data = {
     async callback(payload) {
         if(payload.client.settings.ignoredUsers?.includes(payload.message.author.id)) return
         if(payload.client.settings.ignoreBlocked && payload.message.author.blocked) return
-        if(payload.client.settings.ignoreBots)
+        if(payload.client.settings.ignoreBots) return
         if(!payload.message.content) return
+
         if(!payload.message.author) {
             console.log(payload.message)
             return
         } 
+
         if(!payload.message.id) {
             console.log("Message ID not found, if this is frequent, reboot. If it persists, restart Discord.")
             return
@@ -33,7 +35,6 @@ export const data = {
                 deleted: []
             })
         }
-
         
         // payload.message.content = marked(payload.message.content)
         payload.message.content.replace("\n", `\n  `)
