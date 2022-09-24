@@ -8,9 +8,8 @@ export default async payload => {
         if(contentParsed.type == "emoji") {
             payload.message.content.replace(`<${contentParsed.animated ? "a" : ""}:${contentParsed.name}:${contentParsed.id}>`)
         } else if(contentParsed.type == "mention") {
-            console.log(contentParsed)
             for(const content of contentParsed.content) {
-                payload.message.content.replace(`<@${contentParsed.roleId}>`, chalk.bgHex(`#${contentParsed.roleColour || "7289da"}`).whiteBright(`@${content.content}`))
+                payload.message.content.replace(`<@&${contentParsed.roleId}>`, chalk.bgHex(`#${contentParsed.roleColour || "7289da"}`).whiteBright(`@${content.content}`))
             }
         }
     }

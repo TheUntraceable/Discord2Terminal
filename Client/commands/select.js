@@ -21,7 +21,6 @@ export const data = {
             if(!cachedMessage) continue
             if(client.settings.ignoreBlocked && cachedMessage.author.blocked) continue
             if(client.settings.ignoreUsers?.includes(cachedMessage.author.id)) continue
-
             let messageBlock = ""
 
             if(lastAuthor != cachedMessage.author?.id) {
