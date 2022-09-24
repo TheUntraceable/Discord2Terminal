@@ -7,7 +7,7 @@ export const data = {
     callback: async (payload) => {
         if(payload.message.author.system) return
         if(payload.client.settings.ignoredUsers?.includes(payload.message.author.id)) return
-        if(payload.client.settings.ignoredBlocked && payload.message.author.blocked) return
+        if(payload.client.settings.ignoreBlocked && payload.message.author.blocked) return
         const message = payload.message
 
         if(!await payload.client.channels.has(message.channel_id)) {

@@ -3,13 +3,13 @@ import chalk from 'chalk';
 
 export default async payload => {
     if(!payload.message.content) return
-    if(payload.message.author.id == "507969622876618754") {console.log(payload.message.content_parsed);console.log()}
     for(const contentParsed of payload.message.content_parsed) {
         if(contentParsed.type == "emoji") {
             payload.message.content.replace(`<${contentParsed.animated ? "a" : ""}:${contentParsed.name}:${contentParsed.id}>`)
         } else if(contentParsed.type == "mention") {
             for(const content of contentParsed.content) {
-                payload.message.content.replace(`<@&${contentParsed.roleId}>`, chalk.bgHex(`#${contentParsed.roleColour || "7289da"}`).whiteBright(`@${content.content}`))
+                console.log(content, contentParsed)
+                payload.message.content.replace(`<@&${contentParsed.roleId}>`, chalk.bgHex(`#${contentParsed.roleColour || "7289da"}`)(content.content))
             }
         }
     }

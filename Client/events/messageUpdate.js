@@ -11,7 +11,7 @@ import parseMentions from "../utils/parseMentions.js"
 export const data = {
     name: "MESSAGE_UPDATE",
     async callback(payload) {
-        if(payload.client.settings.ignoredBlocked && payload.message.author.blocked) return
+        if(payload.client.settings.ignoreBlocked && payload.message.author.blocked) return
         if(payload.client.settings.ignoredUsers?.includes(payload.message.author.id)) return
 
         if(!await payload.client.channels.has(payload.channel_id)) {
