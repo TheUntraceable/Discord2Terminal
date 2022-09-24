@@ -34,22 +34,16 @@ export const data = {
         await parseMentions(payload)
 
         const message = channel.created.find(message => {
-            if(!message) return false
-            return message.id == payload.message.id
+            return message?.id == payload.message?.id
         })
         
-
         if(!message) {
             channel.created.push(message)
         } else {
             const index = channel.created.indexOf(message)
-            if(index === -1) {
-                channel.created.push(message)
-            } else {
-                const removed = channel.created.splice(index, 1)[0]
-                channel.updated.push(removed)
-            }
-            channel.created.push(message)
+            const removed = channel.created.splice(index, 1)[0]
+            channel.updated.push(removed)
+            channel.created.push(payload.message)
         }
         await payload.client.channels.set(payload.channel_id, channel)
    }

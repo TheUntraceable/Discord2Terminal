@@ -30,7 +30,7 @@ export const data = {
             }
             
             for(const updated of selectedChannel.updated.filter(updated => updated.id == cachedMessage.id)) {
-                messageBlock += `  ${chalk.hex("#0000ff")(updated.content)}\n`
+                messageBlock += `  ${chalk.blue(updated.content)}\n`
             }
 
             if(selectedChannel.deleted.find(deleted => deleted.id == cachedMessage.id)) {
