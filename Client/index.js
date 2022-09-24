@@ -34,7 +34,7 @@ await load(client)
 const loginOptions = {
     clientId: config.clientId,
     clientSecret: config.clientSecret,
-    scopes: ["rpc","messages.read", "rpc.notifications.read", "rpc.voice.read"],
+    scopes: ["rpc","messages.read", "rpc.notifications.read", "rpc.voice.read", "identify"],
     redirectUri: "https://discord.com"
 }
 
