@@ -11,14 +11,24 @@ export const data = {
         const message = payload.message
 
         if(!await payload.client.channels.has(message.channel_id)) {
-            await payload.client.channels.set(message.channel_id, {
-                created: [],
-                updated: [],
-                deleted: []
-            })
+            try {
+                const channel = await payload.client.getChannel(message.channel_id)
+                await payload.client.channels.set(message.channel_id, {
+                    name: channel.name,
+                    created: [],
+                    updated: [],
+                    deleted: []
+                })
+            } catch {
+                await payload.client.channels.set(message.channel_id, {
+                    created: [],
+                    updated: [],
+                    deleted: []
+                })
+            }
         }
 
-        const channel = await payload.client.channels.get(String(message.channel_id))
+        const channel = await payload.client.channels.get(message.channel_id)
         await filterEmpty(payload.client, payload.channel_id, channel)
 
         await parseMentions(payload)
