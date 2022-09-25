@@ -17,6 +17,7 @@ export const data = {
         }
         
         await payload.client.subscribe("NOTIFICATION_CREATE")
+        await payload.client.subscribe("CHANNEL_CREATE")
 
         const guilds = await payload.client.getGuilds()
         payload.client.guilds = guilds.guilds
