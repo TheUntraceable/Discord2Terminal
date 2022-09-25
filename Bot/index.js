@@ -167,6 +167,15 @@ app.post("/channels/:channelId", checkRatelimits, async (req, res) => {
     res.status(200).json(data)
 })
 
+app.get("/channels/:channelId/messages", checkRatelimits, async (req, res) => {
+    const after = req.query.after
+    const channel = client.channels.cache.get(req.params.channelId) || await client.channels.fetch(req.params.channelId)
+    if(!channel) return res.status(404).json({
+        error: "Channel not found!"
+    })
+    const messages = await channel.messages?.fetch({after})
+    res.status(200).json(messages)
+})
 
 app.listen(config.port, () => {
     console.log(chalk.green.underline(`Listening on port ${config.port}!`))
