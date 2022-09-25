@@ -6,17 +6,11 @@ export default async payload => {
     for(const contentParsed of payload.message.content_parsed) {
         if(contentParsed.type == "emoji") {
             if(contentParsed.surrogate) return
-            const past = payload.message.content
             payload.message.content.replace(`<${contentParsed.animated ? "a" : ""}${contentParsed.name}${contentParsed.emojiId}>`, contentParsed.name)
-            console.log(payload.message.content == past)
         } else if(contentParsed.type == "mention") {
-            console.log(contentParsed)
             for(const content of contentParsed.content) {
                 if(contentParsed.roleId) {
-                    console.log("passed")
-                    const past = payload.message.content
                     payload.message.content.replace(`<@&${contentParsed.roleId}>`, chalk.bgHex(`#${contentParsed.roleColour || "7289da"}`)(content.content))
-                    console.log(past == payload.message.content)
                 }
             }
         }
