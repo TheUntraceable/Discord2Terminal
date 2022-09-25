@@ -37,7 +37,10 @@ export const data = {
         
         // payload.message.content = marked(payload.message.content)
         payload.message.content.replace("\n", `\n  `)
-        await payload.client.users.set(payload.message.author.id, payload.message.author)
+        await payload.client.users.set(payload.message.author.id, {
+            user: payload.message.author,
+            messages: []
+        })
         await parseMentions(payload)
         // await payload.client.channels.push(`${payload.message.channel_id}.created`, payload.message)
         const channel = await payload.client.channels.get(payload.channel_id)
