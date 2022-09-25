@@ -35,7 +35,7 @@ export const data = {
                     client: client,
                     message: updated
                 })
-                messageBlock += `  ${chalk.blue(updated.content)}\n`
+                messageBlock += `  ${updated.content} ${chalk.grey("(edited)")}\n`
             }
 
             if(selectedChannel.deleted.find(deleted => deleted.id == cachedMessage.id)) {

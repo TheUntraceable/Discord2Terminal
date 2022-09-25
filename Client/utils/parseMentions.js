@@ -12,16 +12,12 @@ export default async payload => {
         } else if(contentParsed.type == "mention") {
             console.log(contentParsed)
             for(const content of contentParsed.content) {
-<<<<<<< HEAD
                 if(contentParsed.roleId) {
                     console.log("passed")
                     const past = payload.message.content
                     payload.message.content.replace(`<@&${contentParsed.roleId}>`, chalk.bgHex(`#${contentParsed.roleColour || "7289da"}`)(content.content))
                     console.log(past == payload.message.content)
                 }
-=======
-                payload.message.content.replace(`<@&${contentParsed.roleId}>`, chalk.bgHex(`#${contentParsed.roleColour || "7289da"}`)(content.content))
->>>>>>> 8376fe4 (Current state)
             }
         }
     }
