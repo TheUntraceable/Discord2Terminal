@@ -5,6 +5,7 @@ import filterEmpty from "../utils/filterEmpty.js"
 export const data = {
     name: "NOTIFICATION_CREATE",
     callback: async (payload) => {
+        console.log(payload)
         if(payload.message.author.system) return
         if(payload.client.settings.ignoredUsers?.includes(payload.message.author.id)) return
         if(payload.client.settings.ignoreBlocked && payload.message.author.blocked) return
