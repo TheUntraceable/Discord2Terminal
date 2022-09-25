@@ -1,3 +1,4 @@
+import parseMentions from "../utils/parseMentions.js"
 import chalk from "chalk"
 import getGuildFromName from "../utils/getGuildFromName.js"
 import getChannelFromName from "../utils/getChannelFromName.js"
@@ -8,7 +9,7 @@ export const data = {
     async callback(client, guildString = "", channelString = "") {
 
         const guild = await getGuildFromName(client, guildString)
-        const channel = await getChannelFromName(client, guild, channelString, [ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.PublicThread])
+        const channel = await getChannelFromName(client, guild, channelString, [ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.GuildVoice])
 
         if(!channel) return
 
@@ -30,13 +31,25 @@ export const data = {
             }
             
             for(const updated of selectedChannel.updated.filter(updated => updated.id == cachedMessage.id)) {
+                await parseMentions({
+                    client: client,
+                    message: updated
+                })
                 messageBlock += `  ${chalk.blue(updated.content)}\n`
             }
 
             if(selectedChannel.deleted.find(deleted => deleted.id == cachedMessage.id)) {
-                messageBlock += `  ${chalk.hex("#ff0000")(cachedMessage.content)}\n`
+                await parseMentions({
+                    client: client,
+                    message: cachedMessage
+                })
+                messageBlock += `  ${chalk.hex("#ff0000")(cachedMessage.content)}\n\n`
             } else {
-                messageBlock += `  ${cachedMessage.content}\n`
+                await parseMentions({
+                    client: client,
+                    message: cachedMessage
+                })
+                messageBlock += `  ${cachedMessage.content}\n\n`
             }
 
             message += messageBlock
