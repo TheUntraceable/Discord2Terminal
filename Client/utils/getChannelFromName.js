@@ -1,4 +1,5 @@
 import inquirer from "inquirer"
+import chalk from "chalk"
 import { ChannelType } from "discord.js"
 
 export default async (client, guild, channelString = "") => {
@@ -8,6 +9,10 @@ export default async (client, guild, channelString = "") => {
     const channels = await client.getChannels(guild.id)
 
     for(const channel of channels) {
+        if(channel.type == ChannelType.GuildVoice) {
+            channel.name += ` ${chalk.blue("(voice)")}`
+        }
+
         channelNameToChannel[channel.name] = channel
     }
 

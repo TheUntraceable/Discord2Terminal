@@ -12,7 +12,8 @@ export const data = {
                 "channels"
             ]    
         }])
-        const deleted = await client.db[answer.db].deleteAll()
+        const deleted = await client[answer.db].deleteAll()
+        
         console.log(`Deleted ${deleted} ${answer.db}!`)
     }
 }

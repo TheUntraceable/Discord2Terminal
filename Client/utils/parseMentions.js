@@ -6,6 +6,8 @@ export default async payload => {
     for(const contentParsed of payload.message.content_parsed) {
         if(contentParsed.type == "emoji") {
             if(contentParsed.surrogate) return
+            console.log(`<${contentParsed.animated ? "a" : ""}${contentParsed.name}${contentParsed.emojiId}>`)
+            console.log(contentParsed)
             payload.message.content.replace(`<${contentParsed.animated ? "a" : ""}${contentParsed.name}${contentParsed.emojiId}>`, contentParsed.name)
         } else if(contentParsed.type == "mention") {
             for(const content of contentParsed.content) {
