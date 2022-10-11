@@ -134,16 +134,13 @@ const checkRatelimits = async (req, res) => {
             }, 10000)
         }
     }
-
     
     if(app.ratelimits[req.ip].count >= 5) {
-        res.status(429).send("You are being ratelimited!")
-        return false
+        await res.status(429).send("You are being ratelimited!")
+        return
     }
     app.ratelimits[req.ip].count++
-    
-    return true
-    
+
 }
 
 app.post("/channels/:channelId/messages", checkRatelimits, async (req, res) => {
