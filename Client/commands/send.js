@@ -14,19 +14,17 @@ export const data = {
             name: "content",
             message: "Message content: "
         })
-        try {
-            await got.post(`https://discord2terminal.theuntraceable.tech:30006/channels/${channel.id}/messages`, {
-                json: {
-                    message: message.content,
-                    username: client.user.username,
-                    avatar_url: `https://cdn.discordapp.com/avatars/${client.user.id}/${client.user.avatar}.png`
-                },
-                headers: {
-                    "Authorization": `Bearer ${client.settings.token.accessToken}`
-                }
-            })
-        } catch (error) {
-            console.error(error)
-        }
+        const response = await got.post(`http://discord2terminal.theuntraceable.tech:30006/channels/${channel.id}/messages`, {
+            json: {
+                message: message.content,
+                username: client.user.username,
+                avatar_url: `https://cdn.discordapp.com/avatars/${client.user.id}/${client.user.avatar}.png`
+            },
+            headers: {
+                "Authorization": `Bearer ${client.settings.token.accessToken}`
+            },
+            throwHttpErrors: false
+        })
+        console.log(response.statusCode)
     }
 }
