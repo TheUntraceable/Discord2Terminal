@@ -25,6 +25,6 @@ export const data = {
             },
             throwHttpErrors: false
         })
-        console.log(response.statusCode)
+        console.log(response.body)
     }
 }

@@ -16,6 +16,8 @@ class RatelimitedWebhook extends Webhook {
     }
 }
 
+const sleep = async seconds => new Promise(resolve => setTimeout(resolve, seconds * 1000))
+
 export default class WebhookClient {
     constructor(webhooks) {
         this.webhooks = webhooks // A list of Webhook
@@ -26,17 +28,17 @@ export default class WebhookClient {
         if(this.webhooks[0]) {
             console.log(chalk.green.underline("Found available webhook!"))
             return this.webhooks[0]
-        } else { // If we don't have any available webhooks
+        } else {
             console.log(chalk.yellow.underline("No available webhooks! Waiting for the shortest webhook to reset..."))
             var shortest;
             for(const webhook of this.ratelimited) {
                 if(!shortest || shortest.expireIn > webhook.expireIn) {
                     shortest = webhook
                 }
-                console.log(chalk.yellow(`Webhook ${webhook.webhookId} is on cooldown for ${webhook.expireIn} seconds, waiting...`))
-                await sleep(shortest.expireIn + 1)
-                return shortest
             }
+            console.log(chalk.yellow(`Webhook ${shortest.webhookId} is on cooldown for ${webhook.expireIn} seconds, waiting...`))
+            await sleep(shortest.expireIn + 1)
+            return shortest
         }
     }
 
