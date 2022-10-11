@@ -77,7 +77,7 @@ client.on("interactionCreate", async (interaction) => {
                 await interaction.reply({content: `Deleted ${amount} webhooks!`})
             } else if(subcommand == "recommended") {
                 const active = interaction.options.getInteger("active-users")
-                return await interaction.reply({content: `I would recommend having ${active / 5} webhooks for ${active} active users!`}) // 5 users per webhook allows for 1 message from each user
+                return await interaction.reply({content: `I would recommend having ${(active / 5) + 1} webhooks for ${active} active users!`}) // 5 users per webhook allows for 1 message from each user
             }
         }
     }
