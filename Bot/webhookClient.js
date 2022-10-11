@@ -20,7 +20,10 @@ const sleep = async seconds => new Promise(resolve => setTimeout(resolve, second
 
 export default class WebhookClient {
     constructor(webhooks) {
-        this.webhooks = webhooks // A list of Webhook
+        this.webhooks = [] // A list of Webhook
+        for(const webhook of webhooks) {
+            this.webhooks.push(new Webhook(webhook.webhookId, webhook.webhookToken))
+        }
         this.ratelimited = [] // A list of RatelimitedWebhook
         this.shortest = null
     }
