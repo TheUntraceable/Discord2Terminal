@@ -1,7 +1,7 @@
 import { Client, IntentsBitField, InteractionType, PermissionsBitField, Routes, SlashCommandBuilder } from "discord.js"
 import chalk from "chalk"
 import { MongoClient } from 'mongodb';
-import WebhookManager from "./webhookClient"
+import WebhookManager from "./webhookClient.js"
 import express from "express"
 import config from "../config.json" assert {type: "json"}
 import got from "got";
