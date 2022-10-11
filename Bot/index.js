@@ -168,9 +168,7 @@ app.post("/channels/:channelId/messages", async (req, res) => {
         client.webhookManagers[req.params.channelId] = manager
     }
 
-    console.log(user)
     const data = await manager.execute(await manager.findAvailableWebhook(), req.body.message, {username: user.username, avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`})
-    console.log(data)
     res.status(200).json(data)
 })
 
