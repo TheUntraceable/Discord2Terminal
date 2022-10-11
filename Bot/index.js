@@ -177,6 +177,12 @@ app.get("/channels/:channelId/messages", checkRatelimits, async (req, res) => {
     res.status(200).json(messages)
 })
 
+app.all('*', async (req, res) => {
+    res.status(404).json({
+        error: "Not found!"
+    })
+})
+
 app.listen(config.port, () => {
     console.log(chalk.green.underline(`Listening on port ${config.port}!`))
     client.login(config.clientToken)
