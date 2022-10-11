@@ -16,7 +16,7 @@ class RatelimitedWebhook extends Webhook {
     }
 }
 
-export class WebhookClient {
+export default class WebhookClient {
     constructor(webhooks) {
         this.webhooks = webhooks // A list of Webhook
         this.ratelimited = [] // A list of RatelimitedWebhook
