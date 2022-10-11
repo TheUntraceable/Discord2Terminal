@@ -55,7 +55,7 @@ export const data = {
         const messageCreate = async payload => {
             if(payload.channel_id != channel.id) return
             const { message } = payload
-            await parseMentions(message)
+            await parseMentions(payload)
             state.create(payload)
             await client.channels.push(`${payload.channel_id}.created`, payload.message)
 
