@@ -1,6 +1,9 @@
 import inquirer from "inquirer"
 import got from "got"
 import { ChannelType } from "discord.js"
+import getChannelFromName from "../utils/getChannelFromName.js"
+import getGuildFromName from "../utils/getGuildFromName.js"
+
 export const data = {
     name: "send",
     async callback(client, guildString, channelString) {

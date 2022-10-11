@@ -18,7 +18,7 @@ export const data = {
         let lastAuthor = null
 
         for(const message of channelMessages.created) {
-            if(channelMessages.deleted.find(m => m.id == message.id)) {
+            if(channelMessages.deleted.find(m => m?.id == message?.id)) {
 
                 if(lastAuthor != message.author.id) {
                     console.log(chalk.hex(message.author_color || "#FFFFFF11").underline(message.author.username))
