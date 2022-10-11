@@ -22,6 +22,7 @@ export default class WebhookClient {
     constructor(webhooks) {
         this.webhooks = webhooks // A list of Webhook
         this.ratelimited = [] // A list of RatelimitedWebhook
+        this.shortest = null
     }
 
     async findAvailableWebhook() {
@@ -31,15 +32,8 @@ export default class WebhookClient {
             return this.webhooks[0]
         } else {
             console.log(chalk.yellow.underline("No available webhooks! Waiting for the shortest webhook to reset..."))
-            var shortest;
-            for(const webhook of this.ratelimited) {
-                if(!shortest || shortest.expireIn > webhook.expireIn) {
-                    shortest = webhook
-                }
-            }
-            console.log(chalk.yellow(`Webhook ${shortest.webhookId} is on cooldown for ${webhook.expireIn} seconds, waiting...`))
-            await sleep(shortest.expireIn + 1)
-            return shortest
+            await sleep(this.shortest.expireIn)
+            return await this.findAvailableWebhook()
         }
     }
 
@@ -50,27 +44,29 @@ export default class WebhookClient {
                 content: message,
                 username: author.username,
                 avatar_url: author.avatar
-            }
+            },
+            throwHttpErrors: false
         })
 
         if(response.status == 429) {
             console.log(chalk.red.underline.bold(`Webhook ${webhook.webhookId} is ratelimited! Adding it to the cooldown list...`))
             this.ratelimited.push(new RatelimitedWebhook(webhook.webhookId, webhook.webhookToken, response.data.retry_after))
+            if(this.shortest.expiresIn > response.data.retry_after) this.shortest = {
+                webhook: webhook,
+                expiresIn: response.data.retry_after
+            }
             setTimeout(() => {
                 console.log(chalk.yellow.underline(`Webhook ${webhook.webhookId} is no longer ratelimited!`))
                 this.ratelimited = this.ratelimited.filter(webhook => webhook.webhookId != webhook.webhookId)
-
             })
-            const newWebhook = await this.findAvailableWebhook()
-            if(newWebhook) {
-                console.log(chalk.green.underline.bold(`Found available webhook! Retrying execution of webhook ${newWebhook.webhookId}...`))
-                return await this.execute(newWebhook, message, author)
-            }
+            return await this.execute(await this.findAvailableWebhook(), message, author)
+
         } else if(response.headers["X-RateLimit-Remaining"] == 0) {
             this.ratelimited.push(new RatelimitedWebhook(webhook.webhookId, webhook.webhookToken, response.headers["X-RateLimit-Reset-After"]))
             setTimeout(() => {
                 this.ratelimited = this.ratelimited.filter(webhook => webhook.webhookId != webhook.webhookId)
             }, response.headers["X-RateLimit-Reset-After"])
+            return await this.execute(await this.findAvailableWebhook(), message, author)
         } else if(response.status == 204) {
             return response.data
         }
