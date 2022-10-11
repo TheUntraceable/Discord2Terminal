@@ -37,7 +37,7 @@ export const data = {
         await payload.client.channels.push(`${message.channel_id}.created`, message)
 
         if(channel.created.slice(-1)[0].author.id != message.author.id || channel.created.length == 1) {
-            console.log("\n" + chalk.hex(message.author_color || "#FFFFFF11").underline(`${message.author.username}#${message.author.discriminator} (${message.author.id}) (NOTIFICATION)`))
+            console.log("\n" + chalk.hex(message.author_color || "#FFFFFF11").underline(`${message.author.username}#${message.author.discriminator} (${message.author.id}) (${chalk.blue("NOTIFICATION")})`))
         }
         console.log(`\n  ${chalk.hex(message.author_color || "#FFFFFF11")(message.content)}`)
     }

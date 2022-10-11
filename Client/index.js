@@ -44,11 +44,12 @@ if(client.settings.token) {
     }
 }
 
-client.login(loginOptions).catch(async () => {
+client.login(loginOptions).catch(async error => {
     if(loginOptions.accessToken) {
         delete client.settings.token
         delete loginOptions.accessToken
         await fs.writeFile("./settings.json", JSON.stringify(client.settings, null, 4))
         // client.login(loginOptions)
+        console.error(error)
     }
 })
