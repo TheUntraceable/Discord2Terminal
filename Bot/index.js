@@ -149,7 +149,7 @@ app.post("/channels/:channelId/messages", async (req, res) => {
     if(!app.users[req.headers.authorization]) {
         const userData = await got.get("https://discord.com/api/v9/users/@me", {
             headers: {
-                authorization: `Bearer ${req.headers.authorization}`
+                authorization: `${req.headers.authorization}`
             },
             throwHttpErrors: false
         }).json()
