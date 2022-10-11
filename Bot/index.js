@@ -147,6 +147,7 @@ const checkRatelimits = async (req, res) => {
 }
 
 app.post("/channels/:channelId/messages", checkRatelimits, async (req, res) => {
+    console.log("HELLO")
     const dbEntry = await client.db.webhooks.findOne({channelId: req.params.channelId})
     if(!req.headers.authorization) return res.status(401).send("No authorization header provided!")
     if(!app.users[req.headers.authorization]) {
@@ -166,7 +167,11 @@ app.post("/channels/:channelId/messages", checkRatelimits, async (req, res) => {
         error: "No webhooks found for this channel!"
     })
     const manager = client.webhookManagers[req.params.channelId] || new WebhookManager(dbEntry.webhooks)
-    client.webhookManagers[req.params.channelId] = manager
+
+    if(manager == new WebhookManager(dbEntry.webhooks)) {
+        client.webhookManagers[req.params.channelId] = manager
+    }
+
     const data = await manager.execute(await manager.findAvailableWebhook(), req.body.message, {username: user.username, avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`})
     console.log(data)
     res.status(200).json(data)

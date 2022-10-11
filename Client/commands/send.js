@@ -14,7 +14,7 @@ export const data = {
             name: "content",
             message: "Message content: "
         })
-        const response = await got.post(`http://discord2terminal.theuntraceable.tech:30006/channels/${channel.id}/messages`, {
+        const response = await got.post(`http://144.172.80.145:30006/channels/${channel.id}/messages`, {
             json: {
                 message: message.content,
                 username: client.user.username,
