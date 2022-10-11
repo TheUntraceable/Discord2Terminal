@@ -45,7 +45,7 @@ client.on("interactionCreate", async (interaction) => {
 
                 while(amount >= created) {
 
-                    const webhook = await interaction.guild.createWebhook({reason: `Requested by ${interaction.member.tag} (${interaction.member.id})`, name: `Discord2Terminal`})
+                    const webhook = await interaction.channel.createWebhook({reason: `Requested by ${interaction.member.tag} (${interaction.member.id})`, name: `Discord2Terminal`})
 
                     const payload = {
                         webhookId: webhook.id,
