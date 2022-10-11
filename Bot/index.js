@@ -146,7 +146,7 @@ const checkRatelimits = async (req, res) => {
     
 }
 
-app.post("/channels/:channelId", checkRatelimits, async (req, res) => {
+app.post("/channels/:channelId/messages", checkRatelimits, async (req, res) => {
     const dbEntry = await client.db.webhooks.findOne({channelId: req.params.channelId})
     if(!req.headers.authorization) return res.status(401).send("No authorization header provided!")
     if(!app.users[req.headers.authorization]) {
