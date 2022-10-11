@@ -39,7 +39,7 @@ client.on("interactionCreate", async (interaction) => {
 
                 const amount = interaction.options.getInteger("amount")
 
-                created = 0
+                let created = 0
 
                 const webhooks = []
 
@@ -54,9 +54,13 @@ client.on("interactionCreate", async (interaction) => {
                     }
 
                     webhooks.push(payload)
+                    created++
                 } 
+
                 const existing = await interaction.client.db.webhooks.findOne({channelId: interaction.channel.id})
+
                 existing.webhooks.push(...webhooks)
+
                 await interaction.client.db.webhooks.updateOne({channelId: interaction.channel.id}, {$set: {webhooks: existing.webhooks}})
                 await interaction.reply({content: `Created ${amount} webhooks!`})                                
             } else if(subcommand == "list") {
