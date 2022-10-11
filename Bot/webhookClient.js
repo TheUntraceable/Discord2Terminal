@@ -26,7 +26,6 @@ export default class WebhookClient {
     }
 
     async findAvailableWebhook() {
-        console.log("LOgged")
         if(this.webhooks[0]) {
             console.log(chalk.green.underline("Found available webhook!"))
             return this.webhooks[0]

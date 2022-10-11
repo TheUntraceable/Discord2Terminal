@@ -18,7 +18,7 @@ export const data = {
             json: {
                 message: message.content,
                 username: client.user.username,
-                avatar_url: `https://cdn.discordapp.com/avatars/${client.user.id}/${client.user.avatar}.png`
+                avatar_url: "https://archive.org/download/discordprofilepictures/discordblue.png"
             },
             headers: {
                 "Authorization": `Bearer ${client.settings.token.accessToken}`
