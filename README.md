@@ -13,7 +13,7 @@ After this, in the Client, you will be able to send messages!
 It *would* be, if I didn't mask it via my API. The flow of things is:
 1. You send a message in the terminal
 2. There is a request to **the API** the Bot folder contains
-3. Tje API will find an available webhook in that channel\*
+3. The API will find an available webhook in that channel\*
 4. Your message wil be sent\*\*
 
 \* An "available webhook" means that it is not ratelimited, and is for the currently selected channel.
