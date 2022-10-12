@@ -1,6 +1,6 @@
 # Discord2Terminal
 ## What is this?
-![Demo](./docs/TerminalGif.gif)
+![Demo](/docs/TerminalGif.gif)
 
 Have you ever wanted to use Discord? Have you ever wanted to code? Are you in a load of servers? Is Discord becoming a distraction? Have you wanted to use Discord as a CLI without having to selfbot? I'm here to solve that!
 
