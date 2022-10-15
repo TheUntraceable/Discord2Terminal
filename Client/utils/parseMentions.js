@@ -25,9 +25,13 @@ export default async payload => {
         const id = matches[1];
         if(!id) continue;
         if(!payload.client.users[String(id)]) {
-            const _user = await payload.client.rest.get(Routes.user(id))
-            if(!_user) continue
-            payload.client.users[String(id)] = _user
+            try {
+                const _user = await payload.client.rest.get(Routes.user(id))
+                if(!_user) continue
+                payload.client.users[String(id)] = _user
+            } catch {
+                continue
+            }
         }
         const user = payload.client.users[String(id)]
         payload.message.content = payload.message.content.replace(`<@${id}>`, (chalk.bgHex("#7289da")(`@${user.username}#${user.discriminator}`)))
