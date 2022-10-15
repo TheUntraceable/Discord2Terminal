@@ -34,7 +34,11 @@ export default class WebhookClient {
             return this.webhooks[0]
         } else {
             console.log(chalk.yellow.underline("No available webhooks! Waiting for the shortest webhook to reset..."))
-            await sleep(this.shortest.expireIn)
+            if(!this.shortest) {
+                await sleep(this.shortest.expiresIn)
+            } else {
+                throw new Error("No webhooks available!")
+            }
             return await this.findAvailableWebhook()
         }
     }
