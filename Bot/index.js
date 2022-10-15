@@ -106,6 +106,7 @@ client.on("ready", async () => {
                     .addIntegerOption(option =>
                         option.setName("amount")
                         .setDescription("The amount of webhooks to create")
+                        .setMaxValue(10)
                         .setRequired(true)
                     )
                 )
@@ -120,6 +121,7 @@ client.on("ready", async () => {
                         option.setName("amount")
                         .setDescription("The amount of webhooks to delete")
                         .setRequired(true)
+                        .setMaxValue(10)
                     )
                 ).addSubcommand(option => 
                     option.setName("recommended")
