@@ -81,7 +81,7 @@ export const data = {
             
             await client.channels.push(`${newPayload.channel_id}.updated`, newPayload.message)
 
-            messageBlock.replace(`  ${oldMessage.content}`, `  ${oldMessage.content} ${chalk.grey(`(outdated)`)}\n  ${newMessage.content}\n`)
+            messageBlock.replace(`  ${oldMessage.content}`, `  ${oldMessage.content} ${chalk.grey(`(outdated)`)}\n  ${newPayload.message.content}\n`)
             console.clear()
             console.log(messageBlock)
         }
