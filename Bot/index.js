@@ -66,7 +66,7 @@ client.on("interactionCreate", async (interaction) => {
 
                 } 
 
-                const existing = await interaction.client.db.webhooks.findOne({channelId: interaction.channel.id}))
+                const existing = await interaction.client.db.webhooks.findOne({channelId: interaction.channel.id})
 
                 existing.webhooks.push(...webhooks)
 
