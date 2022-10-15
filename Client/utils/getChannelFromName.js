@@ -16,7 +16,7 @@ export default async (client, guild, channelString = "") => {
         channelNameToChannel[channel.name] = channel
     }
 
-    if(!channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase()) && !client.settings.ignoredChannels?.includes(channel.id)).map(channel => channel.name)) {
+    if(!channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase()) && !client.settings.ignoredChannels?.includes(channel.id) && [ChannelType.GuildText, ChannelType.GuildVoice].includes(channel.type)).map(channel => channel.name)) {
         console.log(chalk.red("Invalid channel!"))
         return
     }
