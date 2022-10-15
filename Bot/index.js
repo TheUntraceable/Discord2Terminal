@@ -172,7 +172,7 @@ app.post("/channels/:channelId/messages", async (req, res) => {
 
     const user = app.users[req.headers.authorization]
     console.log(dbEntry)
-    if(!dbEntry || !dbEntry.webhooks) return res.status(404).json({
+    if(!dbEntry || dbEntry.webhooks.size == 0) return res.status(404).json({
         error: "No webhooks found for this channel!"
     })
     const manager = client.webhookManagers[req.params.channelId] || new WebhookManager(dbEntry.webhooks)
