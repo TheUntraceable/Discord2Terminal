@@ -40,21 +40,29 @@ client.on("interactionCreate", async (interaction) => {
                 const amount = interaction.options.getInteger("amount")
 
                 let created = 0
+                const existingWebhooks = (await interaction.channel.fetchWebhooks()).size
+                if((amount + existingWebhooks) > 10) return await interaction.reply({content: "You cannot create more than 10 webhooks in a channel!"})
 
                 const webhooks = []
-
                 while(amount >= created) {
+                    try {
+                        const webhook = await interaction.channel.createWebhook({reason: `Requested by ${interaction.member.user.tag} (${interaction.member.id})`, name: `2Terminal`})
 
-                    const webhook = await interaction.channel.createWebhook({reason: `Requested by ${interaction.member.tag} (${interaction.member.id})`, name: `2Terminal`})
+                        const payload = {
+                            webhookId: webhook.id,
+                            webhookToken: webhook.token,
+                            channelId: interaction.channel.id
+                        }    
+                        webhooks.push(payload)
 
-                    const payload = {
-                        webhookId: webhook.id,
-                        webhookToken: webhook.token,
-                        channelId: interaction.channel.id
+                        created++
+                    } catch(e) {
+                        console.error(e)
+                        await interaction.reply({
+                            content: `An error occurred while creating webhooks! You may have reached the limit of 10.`,
+                        })
                     }
 
-                    webhooks.push(payload)
-                    created++
                 } 
 
                 const existing = await interaction.client.db.webhooks.findOne({channelId: interaction.channel.id})
@@ -76,8 +84,8 @@ client.on("interactionCreate", async (interaction) => {
                 await interaction.client.db.webhooks.updateOne({guildId: interaction.guild.id}, {$set: {webhooks: existing.webhooks}})
                 await interaction.reply({content: `Deleted ${amount} webhooks!`})
             } else if(subcommand == "recommended") {
-                const active = interaction.options.getInteger("active-users")
-                return await interaction.reply({content: `I would recommend having ${(active / 5) + 1} webhooks for ${active} active users!`}) // 5 users per webhook allows for 1 message from each user
+                const active = interaction.options.getInteger("active-users") || interaction.guild.memberCount
+                return await interaction.reply({content: `I would recommend having ${((active / 5) + 1) > 10 ? 10 : (active / 5) + 1} webhooks for ${active} active users!`}) // 5 users per webhook allows for 1 message from each user
             }
         }
     }

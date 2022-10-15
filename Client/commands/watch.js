@@ -30,6 +30,7 @@ class State {
     }
 
     delete(messageId) {
+        if(!this.state[messageId]) return 
         this.state[messageId].deleted = true
     }
 
@@ -97,8 +98,6 @@ export const data = {
             }
         }
 
-        client.on("MESSAGE_CREATE", createWrapper)
-
         const updateWrapper = async payload => {
             try {
                 await messageUpdate(payload)
@@ -107,8 +106,7 @@ export const data = {
             }
         }
 
-        client.on("MESSAGE_UPDATE", updateWrapper)
-
+        
         const deleteWrapper = async payload => {
             try {
                 await messageDelete(payload)
@@ -117,14 +115,17 @@ export const data = {
             }
         }
 
+        client.on("MESSAGE_CREATE", createWrapper)
+        client.on("MESSAGE_UPDATE", updateWrapper)
         client.on("MESSAGE_DELETE", deleteWrapper)
 
         inquirer.registerPrompt("pressToContinue", PressToContinuePrompt)
+        console.log(chalk.green.bold.underline("Press any key to stop watching."))
         await inquirer.prompt({
             type: "pressToContinue",
-            name: "key",
+            name: "key", 
             anyKey: true,
-            pressToContinueMessage: "Press any key to stop watching..."
+            pressToContinueMessage: ""
 
         })
         client.off("MESSAGE_CREATE", createWrapper)
