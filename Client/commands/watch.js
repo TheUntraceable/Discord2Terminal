@@ -67,7 +67,8 @@ export const data = {
             }
 
             messageBlock += `\n  ${message.content}`
-            console.log(`  ${message.content}`)
+            console.clear()
+            console.log(messageBlock)
         }
 
         const messageUpdate = async newPayload => {
@@ -88,6 +89,7 @@ export const data = {
         const messageDelete = async payload => {
             if(payload.channel_id != channel.id) return
             state.delete(payload.message.id)
+            messageBlock.replace(`  ${payload.message.content}`, chalk.red(`  ${payload.message.content}`))
         }
     
         const createWrapper = async payload => {
