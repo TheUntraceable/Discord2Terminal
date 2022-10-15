@@ -33,7 +33,8 @@ client.on("interactionCreate", async (interaction) => {
         if(interaction.commandName == "webhook") {
             const subcommand = interaction.options.getSubcommand()
             if(subcommand == "create") {
-
+                await interaction.deferReply()
+                interaction.reply = interaction.editReply
                 if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageWebhooks)) return await interaction.reply({content: "You do not have permission to create webhooks!"})
                 if(!interaction.appPermissions.has(PermissionsBitField.Flags.ManageWebhooks)) return await interaction.reply({content: "I do not have permission to create webhooks!"})
 
