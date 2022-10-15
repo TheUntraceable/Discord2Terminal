@@ -81,7 +81,7 @@ export const data = {
             
             await client.channels.push(`${newPayload.channel_id}.updated`, newPayload.message)
 
-            messageBlock.replace(`  ${oldMessage.content}`, `  ${oldMessage.content} ${chalk.grey(`(outdated)`)}\n  ${newPayload.message.content}\n`)
+            messageBlock.replace(`${oldMessage.content}`, `${oldMessage.content} ${chalk.grey(`(outdated)`)}\n  ${newPayload.message.content}`)
             console.clear()
             console.log(messageBlock)
         }
@@ -89,7 +89,7 @@ export const data = {
         const messageDelete = async payload => {
             if(payload.channel_id != channel.id) return
             state.delete(payload.message.id)
-            messageBlock.replace(`  ${payload.message.content}`, chalk.red(`  ${payload.message.content}`))
+            messageBlock.replace(`${payload.message.content}`, chalk.red(`  ${payload.message.content}`))
         }
     
         const createWrapper = async payload => {
@@ -126,7 +126,7 @@ export const data = {
         await inquirer.prompt({
             type: "pressToContinue",
             name: "key", 
-            anyKey: true,
+            enter: true,
             pressToContinueMessage: ""
 
         })
