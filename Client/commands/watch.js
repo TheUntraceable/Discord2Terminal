@@ -61,9 +61,9 @@ export const data = {
             await client.channels.push(`${payload.channel_id}.created`, payload.message)
 
             if(lastAuthor != message?.author?.id) {
-                messageBlock += chalk.hex(message.author_color || "#FFFFFF11").underline(`\n${message.author.username}#${message.author.discriminator} (${message.author.id})\n`)
+                messageBlock += chalk.hex(message.author_color || "#FFFFFF11").underline(`\n${message.author.username}#${message.author.discriminator} (${message.author.id})`)
                 lastAuthor = message.author.id
-                console.log(chalk.hex(message.author_color || "#FFFFFF11").underline(`\n${message.author.username}#${message.author.discriminator} (${message.author.id})\n`)                )
+                console.log(chalk.hex(message.author_color || "#FFFFFF11").underline(`\n${message.author.username}#${message.author.discriminator} (${message.author.id})`))
             }
 
             messageBlock += `\n  ${message.content}`
