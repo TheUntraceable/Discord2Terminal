@@ -18,7 +18,7 @@ client.webhookManagers = {}
 
 
 const generateDatabaseEntry = async interaction => {
-    if(!await interaction.client.db.webhooks.findOne({guildId: interaction.guild.id})) {
+    if(!await interaction.client.db.webhooks.findOne({guildId: interaction.guild.id, channelId: interaction.channel.id})) {
         await interaction.client.db.webhooks.insertOne({
             guildId: interaction.guild.id,
             channelId: interaction.channel.id,
@@ -66,7 +66,7 @@ client.on("interactionCreate", async (interaction) => {
 
                 } 
 
-                const existing = await interaction.client.db.webhooks.findOne({channelId: interaction.channel.id})
+                const existing = await interaction.client.db.webhooks.findOne({channelId: interaction.channel.id}))
 
                 existing.webhooks.push(...webhooks)
 
