@@ -124,7 +124,7 @@ export const data = {
         client.on("MESSAGE_DELETE", deleteWrapper)
 
         inquirer.registerPrompt("pressToContinue", PressToContinuePrompt)
-        console.log(chalk.green.bold.underline("Press any key to stop watching."))
+        console.log(chalk.green.bold.underline("Press enter to stop watching."))
         await inquirer.prompt({
             type: "pressToContinue",
             name: "key", 

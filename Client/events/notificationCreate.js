@@ -5,7 +5,6 @@ import filterEmpty from "../utils/filterEmpty.js"
 export const data = {
     name: "NOTIFICATION_CREATE",
     callback: async (payload) => {
-        console.log(payload)
         if(payload.message.author.system) return
         if(payload.client.settings.ignoredUsers?.includes(payload.message.author.id)) return
         if(payload.client.settings.ignoreBlocked && payload.message.author.blocked) return
@@ -36,7 +35,7 @@ export const data = {
 
         await payload.client.channels.push(`${payload.channel_id}.created`, message)
 
-        if(channel.created.slice(-1)[0].author.id != message.author.id || channel.created.length == 1) {
+        if(channel.created.slice(-1)[0].author?.id != message.author.id || channel.created.length == 1) {
             console.log("\n" + chalk.hex(message.author_color || "#FFFFFF11").underline(`${message.author.username}#${message.author.discriminator} (${message.author.id}) (${chalk.blue("NOTIFICATION")})`))
         }
         console.log(`\n  ${chalk.hex(message.author_color || "#FFFFFF11")(message.content)}`)
