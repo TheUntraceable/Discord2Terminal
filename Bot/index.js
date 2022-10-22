@@ -1,3 +1,4 @@
+import http from "http"
 import { Client, IntentsBitField, InteractionType, PermissionsBitField, Routes, SlashCommandBuilder } from "discord.js"
 import chalk from "chalk"
 import { MongoClient } from 'mongodb';
@@ -5,9 +6,11 @@ import WebhookManager from "./webhookClient.js"
 import express from "express"
 import config from "../config.json" assert {type: "json"}
 import got from "got";
-
+import { Server } from "socket.io";
 const client = new Client({intents: [IntentsBitField.Flags.Guilds]});
 const app = express()
+const server = http.createServer(app)
+const io = new Server(server) 
 app.use(express.json())
 
 client.mongo = new MongoClient(config.mongoUri, { useNewUrlParser: true });
@@ -138,7 +141,7 @@ client.on("ready", async () => {
 app.ratelimits = {}
 app.users = {}
 
-const checkRatelimits = async (req, res) => {
+const checkRatelimits = async (req, res, next) => {
     if(!app.ratelimits[req.ip]) {
         app.ratelimits[req.ip] = {
             count: 0,
@@ -153,10 +156,11 @@ const checkRatelimits = async (req, res) => {
         return
     }
     app.ratelimits[req.ip].count++
+    next()
 
 }
 
-app.post("/channels/:channelId/messages", async (req, res) => {
+app.post("/channels/:channelId/messages", checkRatelimits, async (req, res) => {
     const dbEntry = await client.db.webhooks.findOne({channelId: req.params.channelId})
     if(!req.headers.authorization) return res.status(401).send("No authorization header provided!")
     if(!app.users[req.headers.authorization]) {
@@ -195,13 +199,53 @@ app.get("/channels/:channelId/messages", checkRatelimits, async (req, res) => {
     res.status(200).json(messages)
 })
 
+app.state = new Set()
+
+app.post("/auth/login", async (req, res) => {
+    const { token } = req.body
+    if(app.state.has(token)) {
+        return res.status(400).json({
+            error: "Token already in use!"
+        })
+    }
+    app.state.add(token)
+    res.status(200).json({
+        token
+    })
+})
+
+app.post("/auth/logout", async (req, res) => {
+    const { token } = req.body
+    if(!app.state.has(token)) {
+        return res.status(400).json({
+            error: "Token not in use!"
+        })
+    }
+    app.state.delete(token)
+    res.status(200).json({
+        token
+    })
+})
+
+io.on("connection", socket => {
+    socket.on("auth", async token => {
+        if(!app.state.has(token)) {
+            socket.emit("auth", false)
+            socket.disconnect()
+        }
+        socket.emit("ready")
+    })
+})
+
+
 app.all('*', async (req, res) => {
     res.status(404).json({
         error: "Not found!"
     })
 })
 
-app.listen(config.port, () => {
+
+server.listen(config.port, () => {
     console.log(chalk.green.underline(`Listening on port ${config.port}!`))
     client.login(config.clientToken)
 })
