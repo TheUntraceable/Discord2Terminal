@@ -5,7 +5,8 @@ import parseMentions from '../utils/parseMentions.js';
 
 marked.setOptions({
     renderer: new TerminalRenderer(),
-    unescape: true
+    mangle: false,
+    pedantic: true
 });
 
 export const data = {
@@ -36,7 +37,7 @@ export const data = {
             })
         }
         
-        // payload.message.content = marked(payload.message.content)
+        payload.message.content = marked(payload.message.content)
         payload.message.content.replace("\n", `\n  `)
         await payload.client.users.set(payload.message.author.id, {
             user: payload.message.author,

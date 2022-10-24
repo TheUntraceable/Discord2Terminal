@@ -36,4 +36,5 @@ export default async payload => {
         const user = payload.client.users[String(id)]
         payload.message.content = payload.message.content.replace(`<@${id}>`, (chalk.bgHex("#7289da")(`@${user.username}#${user.discriminator}`)))
     }
+    
 }
