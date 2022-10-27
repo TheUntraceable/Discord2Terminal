@@ -48,7 +48,9 @@ export const data = {
     async callback(client, guildName, channelName) {
 
         const guild = await getGuildFromName(client, guildName)
+        if(!guild) return
         const channel = await getChannelFromName(client, guild, channelName)
+        if(!channel) return
         const state = new State()
         let lastAuthor = null
         let messageBlock = ""

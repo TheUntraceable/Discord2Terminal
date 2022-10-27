@@ -9,8 +9,8 @@ export const data = {
     async callback(client, guildString = "", channelString = "") {
 
         const guild = await getGuildFromName(client, guildString)
+        if(!guild) return
         const channel = await getChannelFromName(client, guild, channelString, [ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.GuildVoice])
-
         if(!channel) return
 
         let message = ""

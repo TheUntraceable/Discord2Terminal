@@ -31,5 +31,10 @@ export default async (client, guild, channelString = "") => {
         message: "Select a channel",
         choices: channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase()) && !client.settings.ignoredChannels?.includes(channel.id)).map(channel => channel.name)
     })
+
+    if(!channelNameToChannel[channel.channel]) {
+        console.log(chalk.red("Failed to get channel. Channel may not exist"))
+        return
+    }
     return channelNameToChannel[channel.channel]
 }

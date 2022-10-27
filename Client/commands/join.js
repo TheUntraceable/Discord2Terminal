@@ -6,7 +6,9 @@ export const data = {
     name: "join",
     async callback(client, guildString = "", channelString = "") {
         const guild = await getGuildFromName(client, guildString)
+        if(!guild) return
         const channel = await getChannelFromName(client, guild, channelString, [ChannelType.GuildVoice, ChannelType.GuildStageVoice])
+        if(!channel) return
         try {
             await client.selectVoiceChannel(selectedChannel.id, {
                 force: true

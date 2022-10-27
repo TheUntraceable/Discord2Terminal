@@ -7,7 +7,9 @@ export const data = {
     name: 'snipe',
     async callback(client, guildString = "", channelString = "") {
         const guild = await getGuildFromName(client, guildString)
+        if(!guild) return
         const channel = await getChannelFromName(client, guild, channelString)
+        if(!channel) return
         const channelMessages = await client.channels.get(channel.id)
 
         if(!channelMessages.deleted) {
