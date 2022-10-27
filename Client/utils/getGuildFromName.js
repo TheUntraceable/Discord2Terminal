@@ -1,3 +1,4 @@
+import chalk from "chalk"
 import inquirer from "inquirer"
 
 export default async (client, guildString = "") => {
