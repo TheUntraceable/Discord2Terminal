@@ -6,7 +6,9 @@ import parseMentions from '../utils/parseMentions.js';
 marked.setOptions({
     renderer: new TerminalRenderer(),
     mangle: false,
-    pedantic: true
+    pedantic: true,
+    smartypants: true,
+    unescape: true
 });
 
 export const data = {

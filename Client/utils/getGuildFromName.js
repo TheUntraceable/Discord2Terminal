@@ -6,9 +6,12 @@ export default async (client, guildString = "") => {
 
     for(const guild of client.guilds) {
         guilds[guild.name] = guild
+        if(guild.name.toLowerCase() == guildString.toLowerCase()) {
+            return guild
+        }
     }
 
-    if(!Object.keys(guilds).filter(guild => guild.toLowerCase().includes(guildString.toLowerCase()) && !client.settings.ignoredGuilds?.includes(guild.id))) {
+    if(!(Object.keys(guilds).filter(guild => guild.toLowerCase().includes(guildString.toLowerCase()) && !client.settings.ignoredGuilds?.includes(guild.id)).length)) {
         console.log(chalk.red("Invalid guild!"))
         return
     }

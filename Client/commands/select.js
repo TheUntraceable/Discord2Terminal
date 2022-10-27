@@ -43,13 +43,13 @@ export const data = {
                     client: client,
                     message: cachedMessage
                 })
-                messageBlock += `  ${chalk.hex("#ff0000")(cachedMessage.content)}\n\n`
+                messageBlock += `  ${chalk.hex("#ff0000")(cachedMessage.content)}\n`
             } else {
                 await parseMentions({
                     client: client,
                     message: cachedMessage
                 })
-                messageBlock += `  ${cachedMessage.content}\n\n`
+                messageBlock += `  ${cachedMessage.content}\n`
             }
 
             message += messageBlock

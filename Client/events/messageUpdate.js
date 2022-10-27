@@ -5,7 +5,9 @@ import TerminalRenderer from 'marked-terminal';
 marked.setOptions({
     renderer: new TerminalRenderer(),
     mangle: false,
-    pedantic: true
+    pedantic: true,
+    smartypants: true,
+    unescape: true
 });
 
 import parseMentions from "../utils/parseMentions.js"
