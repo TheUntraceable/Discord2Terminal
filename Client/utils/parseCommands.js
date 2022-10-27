@@ -5,7 +5,7 @@ const parseCommands = async client => {
     const answer = await inquirer.prompt({
         type: "input",
         name: "command",
-        message: "Enter a command"
+        message: "Enter a command: "
     })
 
     let string = answer.command

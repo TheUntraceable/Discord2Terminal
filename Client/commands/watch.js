@@ -2,8 +2,37 @@ import chalk from "chalk"
 import getGuildFromName from "../utils/getGuildFromName.js"
 import parseMentions from "../utils/parseMentions.js"
 import inquirer from "inquirer"
-import PressToContinuePrompt from "inquirer-press-to-continue"
 import getChannelFromName from "../utils/getChannelFromName.js"
+
+const parseWatchCommand = async (client, guild, channel) => {
+    const { string } = await inquirer.prompt({
+        type: "input",
+        name: "string",
+        message: "Enter a command: "
+    })
+
+    const [commandName, ...args] = string.split(" ")
+
+    if(commandName == "send") {
+        const command = client.commands["send"]
+        await command(client, guild, channel, ...args)
+    } else if(commandName == "exit") {
+        return
+    }
+
+    const command = client.commands[commandName]
+
+    if(!command) {
+        console.log(chalk.red.underline(`Command ${commandName} not found`))
+        return await parseWatchCommand(client, guild, channel)
+    }
+
+    await command(client).catch(error => {
+        console.error(error)
+        console.error(chalk.red.underline(error))
+    })
+    return await parseWatchCommand(client, guild, channel)
+}
 
 class State {
     constructor() {
@@ -46,13 +75,17 @@ class State {
 export const data = {
     name: "watch",
     async callback(client, guildName, channelName) {
+
         const guild = await getGuildFromName(client, guildName)
         if(!guild) return
+
         const channel = await getChannelFromName(client, guild, channelName)
         if(!channel) return
-        const command = await import("./select.js")
-        await command.data.callback(client, guild.name, channel.name)
+
+        await client.commands["select"](client, guild.name, channel.name)
+
         const state = new State()
+
         let lastAuthor = null
         let messageBlock = ""
 
@@ -126,15 +159,8 @@ export const data = {
         client.on("MESSAGE_UPDATE", updateWrapper)
         client.on("MESSAGE_DELETE", deleteWrapper)
 
-        inquirer.registerPrompt("pressToContinue", PressToContinuePrompt)
-        console.log(chalk.green.bold.underline("Press enter to stop watching."))
-        await inquirer.prompt({
-            type: "pressToContinue",
-            name: "key", 
-            enter: true,
-            pressToContinueMessage: ""
-
-        })
+        await parseWatchCommand(client, guild, channel )
+ 
         client.off("MESSAGE_CREATE", createWrapper)
         client.off("MESSAGE_UPDATE", updateWrapper)
         client.off("MESSAGE_DELETE", deleteWrapper)
