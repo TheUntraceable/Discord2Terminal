@@ -3,6 +3,7 @@ import got from "got"
 import { ChannelType } from "discord.js"
 import getChannelFromName from "../utils/getChannelFromName.js"
 import getGuildFromName from "../utils/getGuildFromName.js"
+import chalk from "chalk"
 
 export const data = {
     name: "send",
@@ -25,6 +26,8 @@ export const data = {
             },
             throwHttpErrors: false
         })
-        console.log(response.body)
+        if(JSON.parse(response.body)?.error) {
+            console.log(chalk.red(JSON.parse(response.body).error))
+        }
     }
 }

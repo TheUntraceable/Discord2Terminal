@@ -1,8 +1,19 @@
 import { Routes } from 'discord.js';
 import chalk from 'chalk';
+import { marked } from 'marked';
+import TerminalRenderer from 'marked-terminal';
+
+marked.setOptions({
+    renderer: new TerminalRenderer(),
+    mangle: false,
+    pedantic: true,
+    smartypants: true,
+    unescape: true,
+});
 
 export default async payload => {
     if(!payload.message.content) return
+    payload.message.content = marked.parseInline(payload.message.content)
     for(const contentParsed of payload.message.content_parsed) {
         if(contentParsed.type == "emoji") {
             if(contentParsed.surrogate) return

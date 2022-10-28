@@ -8,14 +8,14 @@ const parseWatchCommand = async (client, guild, channel) => {
     const { string } = await inquirer.prompt({
         type: "input",
         name: "string",
-        message: "Enter a command: "
+        message: "Enter a command (watch): "
     })
 
     const [commandName, ...args] = string.split(" ")
 
     if(commandName == "send") {
         const command = client.commands["send"]
-        await command(client, guild, channel, ...args)
+        await command(client, guild.name, channel.name, args.join(""))
     } else if(commandName == "exit") {
         return
     }
@@ -40,8 +40,7 @@ class State {
     }
 
     update(newPayload) {
-        const oldMessage = this.state[newPayload.message.id].current
-        if(!this.state[oldMessage?.id]) {
+        if(!this.state[newPayload.message.id]) {
             this.state[newPayload.message.id] = {
                 current: newPayload.message,
                 updates: [],
@@ -50,8 +49,8 @@ class State {
             return
         }
 
-        this.state[oldMessage.id].updates.push(oldMessage)
-        this.state[oldMessage.id].current = newPayload.message
+        this.state[newPayload.message.id].updates.push(this.state[newPayload.message.id])
+        this.state[newPayload.message.id].current = newPayload.message
     }
 
     getMessage(messageId) {
@@ -82,19 +81,17 @@ export const data = {
         const channel = await getChannelFromName(client, guild, channelName)
         if(!channel) return
 
-        await client.commands["select"](client, guild.name, channel.name)
+        let messageBlock = await client.commands["select"](client, guild.name, channel.name)
 
         const state = new State()
 
         let lastAuthor = null
-        let messageBlock = ""
 
         const messageCreate = async payload => {
             if(payload.channel_id != channel.id) return
             const { message } = payload
             await parseMentions(payload)
             state.create(payload)
-            await client.channels.push(`${payload.channel_id}.created`, payload.message)
 
             if(lastAuthor != message?.author?.id) {
                 messageBlock += chalk.hex(message.author_color || "#FFFFFF11").underline(`\n${message.author.username}#${message.author.discriminator} (${message.author.id})`)
@@ -114,10 +111,6 @@ export const data = {
             const oldMessage = await state.getMessage(newPayload.message.id)
 
             state.update(newPayload)
-            
-            await client.channels.pull(`${newPayload.channel_id}.created`, oldMessage)
-            await client.channels.push(`${newPayload.channel_id}.updated`, oldMessage)
-            await client.channels.push(`${newPayload.channel_id}.created`, newPayload.message)
 
             messageBlock.replace(`${oldMessage.content}`, `${oldMessage.content} ${chalk.grey(`(outdated)`)}\n  ${newPayload.message.content}`)
             console.clear()

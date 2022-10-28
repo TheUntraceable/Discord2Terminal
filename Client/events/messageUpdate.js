@@ -1,14 +1,4 @@
 import filterEmpty from "../utils/filterEmpty.js"
-import { marked } from 'marked';
-import TerminalRenderer from 'marked-terminal';
-
-marked.setOptions({
-    renderer: new TerminalRenderer(),
-    mangle: false,
-    pedantic: true,
-    smartypants: true,
-    unescape: true
-});
 
 import parseMentions from "../utils/parseMentions.js"
 
@@ -30,10 +20,6 @@ export const data = {
         
         const channel = await payload.client.channels.get(payload.channel_id)
         await filterEmpty(payload.client, payload.channel_id, channel)
-
-        if(payload.message.content) {
-            payload.message.content = marked(payload.message.content)
-        }
 
         await parseMentions(payload)
 

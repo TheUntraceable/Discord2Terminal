@@ -1,15 +1,5 @@
 import filterEmpty from '../utils/filterEmpty.js';
-import { marked } from 'marked';
-import TerminalRenderer from 'marked-terminal';
 import parseMentions from '../utils/parseMentions.js';
-
-marked.setOptions({
-    renderer: new TerminalRenderer(),
-    mangle: false,
-    pedantic: true,
-    smartypants: true,
-    unescape: true
-});
 
 export const data = {
     name: "MESSAGE_CREATE",
@@ -39,7 +29,6 @@ export const data = {
             })
         }
         
-        payload.message.content = marked(payload.message.content)
         payload.message.content.replace("\n", `\n  `)
         await payload.client.users.set(payload.message.author.id, {
             user: payload.message.author,

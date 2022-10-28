@@ -29,13 +29,13 @@ export const data = {
                 messageBlock += chalk.hex(cachedMessage.author_color || "#FFFFFF11").underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})\n`)
                 lastAuthor = cachedMessage.author.id
             }
-            
+
             for(const updated of selectedChannel.updated.filter(updated => updated.id == cachedMessage.id)) {
                 await parseMentions({
                     client: client,
                     message: updated
                 })
-                messageBlock += `  ${updated.content} ${chalk.grey("(edited)")}\n`
+                messageBlock += `  ${updated.content} ${chalk.grey("(outdated)")} ->`
             }
 
             if(selectedChannel.deleted.find(deleted => deleted.id == cachedMessage.id)) {
@@ -55,5 +55,6 @@ export const data = {
             message += messageBlock
         }
         console.log(message)
+        return message
     }
 }
