@@ -13,13 +13,14 @@ marked.setOptions({
 
 export default async payload => {
     if(!payload.message.content) return
-    payload.message.content = marked.parseInline(payload.message.content)
     for(const contentParsed of payload.message.content_parsed) {
         if(contentParsed.type == "emoji") {
             if(contentParsed.surrogate) return
-            // console.log(`<${contentParsed.animated ? "a" : ""}${contentParsed.name}${contentParsed.emojiId}>`)
-            // console.log(contentParsed)
-            payload.message.content.replace(`<${contentParsed.animated ? "a" : ""}${contentParsed.name}${contentParsed.emojiId}>`, contentParsed.name)
+            for(const word of payload.message.content.split(" ")) {
+                if(word.startsWith("<") && word.endsWith(">") && word.includes(contentParsed.emojiId) && word.includes(contentParsed.name)) {
+                    payload.message.content = payload.message.content.replace(word, contentParsed.name)
+                }
+            }
         } else if(contentParsed.type == "mention") {
             for(const content of contentParsed.content) {
                 if(contentParsed.roleId) {
@@ -28,9 +29,10 @@ export default async payload => {
             }
         }
     }
+
     for(const word of payload.message.content.split(" ")) {
         const matches = word.matchAll('<@!?([0-9]{15,20})>$').next().value;
-    
+        
         if (!matches) continue;
         
         const id = matches[1];
@@ -46,6 +48,6 @@ export default async payload => {
         }
         const user = payload.client.users[String(id)]
         payload.message.content = payload.message.content.replace(`<@${id}>`, (chalk.bgHex("#7289da")(`@${user.username}#${user.discriminator}`)))
+        payload.message.content = marked.parseInline(payload.message.content)
     }
-    
 }
