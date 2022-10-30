@@ -112,7 +112,7 @@ export const data = {
 
             state.update(newPayload)
 
-            messageBlock.replace(`${oldMessage.content}`, `${oldMessage.content} ${chalk.grey(`(outdated)`)}\n  ${newPayload.message.content}`)
+            messageBlock = messageBlock.replace(`${oldMessage.content}`, `${oldMessage.content} ${chalk.grey(`(outdated)`)}\n  ${newPayload.message.content}`)
             console.clear()
             console.log(messageBlock)
         }
@@ -120,7 +120,7 @@ export const data = {
         const messageDelete = async payload => {
             if(payload.channel_id != channel.id) return
             state.delete(payload.message.id)
-            messageBlock.replace(`${payload.message.content}`, chalk.red(`  ${payload.message.content}`))
+            messageBlock = messageBlock.replace(`${payload.message.content}`, chalk.red(`  ${payload.message.content}`))
         }
     
         const createWrapper = async payload => {

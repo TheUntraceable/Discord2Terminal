@@ -24,7 +24,7 @@ export default async payload => {
         } else if(contentParsed.type == "mention") {
             for(const content of contentParsed.content) {
                 if(contentParsed.roleId) {
-                    payload.message.content.replace(`<@&${contentParsed.roleId}>`, chalk.bgHex(`#${contentParsed.roleColour || "7289da"}`)(content.content))
+                    payload.message.content = payload.message.content.replace(`<@&${contentParsed.roleId}>`, chalk.bgHex(`#${Number(contentParsed.roleColor).toString(16).padStart(2, "0") || "7289da"}`)(content.content))
                 }
             }
         }
