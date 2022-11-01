@@ -16,7 +16,7 @@ export const data = {
             console.log(chalk.green(`Successfully joined ${channel.channel}`))
         } catch(error) {
             console.log(chalk.red(`Failed to join ${channel.channel}`))
-            client.emit("commandError", error)
+            return
         }
     }
 }

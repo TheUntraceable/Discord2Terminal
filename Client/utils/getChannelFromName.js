@@ -2,7 +2,7 @@ import inquirer from "inquirer"
 import chalk from "chalk"
 import { ChannelType } from "discord.js"
 
-export default async (client, guild, channelString = "") => {
+export default async (client, guild, channelString = "", channelTypes = [ChannelType.GuildText, ChannelType.GuildVoice]) => {
     if(!guild) return
     const channelNameToChannel = {}
     
@@ -19,7 +19,7 @@ export default async (client, guild, channelString = "") => {
         channelNameToChannel[channel.name] = channel
     }
 
-    if((channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase()) && !client.settings.ignoredChannels?.includes(channel.id) && [ChannelType.GuildText, ChannelType.GuildVoice].includes(channel.type)).map(channel => channel.name)).length == 0) {
+    if((channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase()) && !client.settings.ignoredChannels?.includes(channel.id) && channelTypes.includes(channel.type)).map(channel => channel.name)).length == 0) {
         console.log(chalk.red("Invalid channel!"))
         return
     }
