@@ -181,10 +181,10 @@ app.post("/channels/:channelId/messages", checkRatelimits, async (req, res) => {
     if(!dbEntry || dbEntry.webhooks.size == 0) return res.status(404).json({
         error: "No webhooks found for this channel!"
     })
-    const manager = client.webhookManagers[req.params.channelId] || new WebhookManager(dbEntry.webhooks)
+    const manager = app.webhookManagers[req.params.channelId] || new WebhookManager(dbEntry.webhooks)
 
     if(manager == new WebhookManager(dbEntry.webhooks)) {
-        client.webhookManagers[req.params.channelId] = manager
+        app.webhookManagers[req.params.channelId] = manager
     }
 
     const data = await manager.execute(await manager.findAvailableWebhook(), req.body.message, {username: user.username, avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`})
