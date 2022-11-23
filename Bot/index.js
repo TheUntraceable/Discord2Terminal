@@ -1,5 +1,6 @@
 import http from "http"
-import { Client, IntentsBitField, InteractionType, PermissionsBitField, Routes, SlashCommandBuilder } from "discord.js"
+import { Client, ChatInputCommandInteraction, InteractionType, PermissionsBitField, Routes, SlashCommandBuilder } from "discord.js"
+import { verifyKeyMiddleware } from "discord-interactions"
 import chalk from "chalk"
 import { MongoClient } from 'mongodb';
 import WebhookManager from "./webhookClient.js"
@@ -7,17 +8,18 @@ import express from "express"
 import config from "../config.json" assert {type: "json"}
 import got from "got";
 import { Server } from "socket.io";
-const client = new Client({intents: [IntentsBitField.Flags.Guilds]});
+
 const app = express()
+const client = new Client({intents: []})
 const server = http.createServer(app)
 const io = new Server(server) 
 app.use(express.json())
 
-client.mongo = new MongoClient(config.mongoUri, { useNewUrlParser: true });
-client.db = client.mongo.db("DiscordTerminal")
-client.db.webhooks = client.db.collection("webhooks");
-client.mongo.connect();
-client.webhookManagers = {}
+app.mongo = new MongoClient(config.mongoUri, { useNewUrlParser: true });
+app.db = app.mongo.db("DiscordTerminal")
+app.db.webhooks = app.db.collection("webhooks");
+app.mongo.connect();
+app.webhookManagers = {}
 
 
 const generateDatabaseEntry = async interaction => {
@@ -38,14 +40,14 @@ client.on("interactionCreate", async (interaction) => {
             if(subcommand == "create") {
                 await interaction.deferReply()
                 interaction.reply = interaction.editReply
-                if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageWebhooks)) return await interaction.reply({content: "You do not have permission to create webhooks!"})
-                if(!interaction.appPermissions.has(PermissionsBitField.Flags.ManageWebhooks)) return await interaction.reply({content: "I do not have permission to create webhooks!"})
+                if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageWebhooks)) return await interaction.editReply({content: "You do not have permission to create webhooks!"})
+                if(!interaction.appPermissions.has(PermissionsBitField.Flags.ManageWebhooks)) return await interaction.editReply({content: "I do not have permission to create webhooks!"})
 
                 const amount = interaction.options.getInteger("amount")
 
                 let created = 0
                 const existingWebhooks = (await interaction.channel.fetchWebhooks()).size
-                if((amount + existingWebhooks) > 10) return await interaction.reply({content: "You cannot create more than 10 webhooks in a channel!"})
+                if((amount + existingWebhooks) > 10) return await interaction.editReply({content: "You cannot create more than 10 webhooks in a channel!"})
 
                 const webhooks = []
                 while(amount >= created) {
@@ -62,7 +64,7 @@ client.on("interactionCreate", async (interaction) => {
                         created++
                     } catch(e) {
                         console.error(e)
-                        await interaction.reply({
+                        await interaction.editReply({
                             content: `An error occurred while creating webhooks! You may have reached the limit of 10.`,
                         })
                     }
@@ -74,7 +76,7 @@ client.on("interactionCreate", async (interaction) => {
                 existing.webhooks.push(...webhooks)
 
                 await interaction.client.db.webhooks.updateOne({channelId: interaction.channel.id}, {$set: {webhooks: existing.webhooks}})
-                await interaction.reply({content: `Created ${amount} webhooks!`})                                
+                await interaction.editReply({content: `Created ${amount} webhooks!`})                                
             } else if(subcommand == "list") {
                 const existing = await interaction.client.db.webhooks.findOne({guildId: interaction.guild.id})
                 if(!existing.webhooks) return await interaction.reply({content: "No webhooks found!"})
@@ -161,7 +163,7 @@ const checkRatelimits = async (req, res, next) => {
 }
 
 app.post("/channels/:channelId/messages", checkRatelimits, async (req, res) => {
-    const dbEntry = await client.db.webhooks.findOne({channelId: req.params.channelId})
+    const dbEntry = await app.db.webhooks.findOne({channelId: req.params.channelId})
     if(!req.headers.authorization) return res.status(401).send("No authorization header provided!")
     if(!app.users[req.headers.authorization]) {
         const userData = await got.get("https://discord.com/api/v9/users/@me", {
@@ -237,6 +239,22 @@ io.on("connection", socket => {
     })
 })
 
+const PUBLIC_KEY = 'b220f5f6f864ea672b8b2b90cfbd646122673a65702d2c32148e0887181e544c';
+
+app.post("/interactions", verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
+    const interaction = new ChatInputCommandInteraction(client, req.body)
+    interaction.reply = async (payload) => {
+        return res.json({
+            type: 4,
+            data: payload1
+        })
+    }
+    interaction.deferReply = async () => {
+        return res.json({
+            type: 5
+        })
+    }
+})
 
 app.all('*', async (req, res) => {
     res.status(404).json({
@@ -244,8 +262,6 @@ app.all('*', async (req, res) => {
     })
 })
 
-
 server.listen(config.port, () => {
     console.log(chalk.green.underline(`Listening on port ${config.port}!`))
-    client.login(config.clientToken)
 })
