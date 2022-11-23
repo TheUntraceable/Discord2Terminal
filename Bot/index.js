@@ -13,7 +13,6 @@ const app = express()
 const client = new Client({intents: []})
 const server = http.createServer(app)
 const io = new Server(server) 
-app.use(express.json())
 
 app.mongo = new MongoClient(config.mongoUri, { useNewUrlParser: true });
 app.db = app.mongo.db("DiscordTerminal")
@@ -241,8 +240,9 @@ io.on("connection", socket => {
 
 const PUBLIC_KEY = 'b220f5f6f864ea672b8b2b90cfbd646122673a65702d2c32148e0887181e544c';
 
-app.post("/interactions", verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
+app.post("/interactions", verifyKeyMiddleware(PUBLIC_KEY), async (req, res, next) => {
     const interaction = new ChatInputCommandInteraction(client, req.body)
+    express.json()(req, res, next)
     interaction.reply = async (payload) => {
         return res.json({
             type: 4,
@@ -254,6 +254,7 @@ app.post("/interactions", verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
             type: 5
         })
     }
+    client.emit("interactionCreate", interaction)
 })
 
 app.all('*', async (req, res) => {
