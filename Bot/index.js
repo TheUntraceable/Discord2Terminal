@@ -246,7 +246,7 @@ app.post("/interactions", verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
     interaction.reply = async (payload) => {
         return res.json({
             type: 4,
-            data: payload1
+            data: payload
         })
     }
     interaction.deferReply = async () => {
