@@ -161,7 +161,7 @@ const checkRatelimits = async (req, res, next) => {
 
 }
 
-app.post("/channels/:channelId/messages", checkRatelimits, async (req, res) => {
+app.post("/channels/:channelId/messages", express.json(), checkRatelimits, async (req, res) => {
     const dbEntry = await app.db.webhooks.findOne({channelId: req.params.channelId})
     if(!req.headers.authorization) return res.status(401).send("No authorization header provided!")
     if(!app.users[req.headers.authorization]) {
@@ -202,7 +202,7 @@ app.get("/channels/:channelId/messages", checkRatelimits, async (req, res) => {
 
 app.state = new Set()
 
-app.post("/auth/login", async (req, res) => {
+app.post("/auth/login", express.json(), async (req, res) => {
     const { token } = req.body
     if(app.state.has(token)) {
         return res.status(400).json({
@@ -215,7 +215,7 @@ app.post("/auth/login", async (req, res) => {
     })
 })
 
-app.post("/auth/logout", async (req, res) => {
+app.post("/auth/logout", express.json(), async (req, res) => {
     const { token } = req.body
     if(!app.state.has(token)) {
         return res.status(400).json({
