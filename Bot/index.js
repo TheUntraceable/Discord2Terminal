@@ -264,5 +264,6 @@ app.all('*', async (req, res) => {
 })
 
 server.listen(config.port, () => {
+    client.login(config.clientToken)
     console.log(chalk.green.underline(`Listening on port ${config.port}!`))
 })
