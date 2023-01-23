@@ -67,4 +67,4 @@ Partial means that the argument will filter values to show you, by the `list.fil
 | eval | Evaluate JavaScript | JavaScript | Anything |
 | join | Join a voice channel | Partial Server Name?, Partial Channel Name? | Success message |
 | leave | Leave a voice channel | None | Nothing |
-| watch | Get messages from a channel in real time | Partial Server Name?, Partial Channel Name? | Messages from that channel in real time
+| watch | Get messages from a channel in real time | Partial Server Name?, Partial Channel Name? | Messages from that channel in real time |
