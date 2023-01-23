@@ -9,7 +9,7 @@ import { QuickDB, SqliteDriver } from "quick.db"
 let config;
 
 try {
-    config = JSON.parse(await fs.readFile("./config.json", "utf8"))
+    config = JSON.parse(await fs.readFile("../config.json", "utf8"))
 } catch(error) {
     console.error("Please create a config.json file with your client ID and secret.")
     process.exit(1)

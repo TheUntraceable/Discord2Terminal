@@ -40,5 +40,16 @@ export const data = {
         await filterEmpty(payload.client, payload.channel_id, channel)
         channel.created.push(payload.message)
         await payload.client.channels.set(payload.channel_id, channel)
+
+        if(payload.message.content.startsWith(payload.client.settings.prefix)) {
+            const args = payload.message.content.slice(payload.client.settings.prefix.length).trim().split(/ +/g)
+            const command = args.shift().toLowerCase()
+            const cmd = payload.client.commands.get(command)
+            if(!cmd) {
+                console.error(`Command ${command} not found.`)
+                return
+            }
+            await cmd.callback(payload.client, payload.message, args)
+        }
     }
 }
