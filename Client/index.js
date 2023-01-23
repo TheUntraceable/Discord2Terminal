@@ -1,10 +1,28 @@
 import { Client } from "@theuntraceable/discord-rpc"
 import { REST } from "discord.js"
-import config from "../config.json" assert {type: "json"}
 import fs from "fs/promises"
-import settings from "./settings.json" assert {type: "json"}
+// import config from "../config.json" assert {type: "json"}
+// import settings from "./settings.json" assert {type: "json"}
 import load from "./utils/load.js"
 import { QuickDB, SqliteDriver } from "quick.db"
+
+let config;
+
+try {
+    config = JSON.parse(await fs.readFile("./config.json", "utf8"))
+} catch(error) {
+    console.error("Please create a config.json file with your client ID and secret.")
+    process.exit(1)
+}
+
+let settings;
+
+try {
+    settings = JSON.parse(await fs.readFile("./settings.json", "utf8"))
+} catch(error) {
+    settings = {}
+    await fs.writeFile("./settings.json", JSON.stringify(settings, null, 4))
+}
 
 const client = new Client({
     transport: "ipc"
@@ -17,6 +35,7 @@ client.db = new QuickDB({
 
 client.channels = client.db.table("channels")
 client.users = client.db.table("users")
+client.tags = client.db.table("tags")
 
 client.settings = settings
 client.commands = {}
