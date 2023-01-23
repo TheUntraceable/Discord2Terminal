@@ -17,7 +17,7 @@ const io = new Server(server)
 app.mongo = new MongoClient(config.mongoUri, { useNewUrlParser: true });
 app.db = app.mongo.db("DiscordTerminal")
 app.db.webhooks = app.db.collection("webhooks");
-app.mongo.connect();
+await app.mongo.connect();
 app.webhookManagers = {}
 
 
