@@ -21,7 +21,7 @@ export default async (client, guildString = "") => {
         type: "list",
         name: "guild",
         message: "Select a guild",
-        choices: Object.keys(guilds).filter(guild => guild.toLowerCase().includes(guildString.toLowerCase()) && !client.settings.ignoredGuilds?.includes(guild.id))
+        choices: filteredGuilds
     })
 
     const guild = guilds[answer.guild]
