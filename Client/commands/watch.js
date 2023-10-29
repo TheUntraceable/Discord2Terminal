@@ -58,7 +58,9 @@ class State {
     }
 
     delete(messageId) {
-        if(!this.state[messageId]) return 
+        if (!this.state[messageId]) {
+          return
+        } 
         this.state[messageId].deleted = true
     }
 
@@ -76,10 +78,14 @@ export const data = {
     async callback(client, guildName, channelName) {
 
         const guild = await getGuildFromName(client, guildName)
-        if(!guild) return
+        if (!guild) {
+          return
+        }
 
         const channel = await getChannelFromName(client, guild, channelName)
-        if(!channel) return
+        if (!channel) {
+          return
+        }
 
         let messageBlock = await client.commands["select"](client, guild.name, channel.name)
 
@@ -88,7 +94,9 @@ export const data = {
         let lastAuthor = null
 
         const messageCreate = async payload => {
-            if(payload.channel_id != channel.id) return
+            if (payload.channel_id != channel.id) {
+              return
+            }
             const { message } = payload
             await parseMentions(payload)
             state.create(payload)
@@ -106,7 +114,9 @@ export const data = {
 
         const messageUpdate = async newPayload => {
 
-            if(newPayload.channel_id != channel.id) return
+            if (newPayload.channel_id != channel.id) {
+              return
+            }
             
             const oldMessage = await state.getMessage(newPayload.message.id)
 
@@ -118,7 +128,9 @@ export const data = {
         }
 
         const messageDelete = async payload => {
-            if(payload.channel_id != channel.id) return
+            if (payload.channel_id != channel.id) {
+              return
+            }
             state.delete(payload.message.id)
             messageBlock = messageBlock.replace(`${payload.message.content}`, chalk.red(`  ${payload.message.content}`))
         }

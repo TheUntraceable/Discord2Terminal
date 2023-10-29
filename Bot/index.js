@@ -39,14 +39,20 @@ client.on("interactionCreate", async (interaction) => {
             if(subcommand == "create") {
                 await interaction.deferReply()
                 interaction.reply = interaction.editReply
-                if(!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageWebhooks)) return await interaction.editReply({content: "You do not have permission to create webhooks!"})
-                if(!interaction.appPermissions.has(PermissionsBitField.Flags.ManageWebhooks)) return await interaction.editReply({content: "I do not have permission to create webhooks!"})
+                if (!interaction.memberPermissions.has(PermissionsBitField.Flags.ManageWebhooks)) {
+                  return await interaction.editReply({content: "You do not have permission to create webhooks!"})
+                }
+                if (!interaction.appPermissions.has(PermissionsBitField.Flags.ManageWebhooks)) {
+                  return await interaction.editReply({content: "I do not have permission to create webhooks!"})
+                }
 
                 const amount = interaction.options.getInteger("amount")
 
                 let created = 0
                 const existingWebhooks = (await interaction.channel.fetchWebhooks()).size
-                if((amount + existingWebhooks) > 10) return await interaction.editReply({content: "You cannot create more than 10 webhooks in a channel!"})
+                if ((amount + existingWebhooks) > 10) {
+                  return await interaction.editReply({content: "You cannot create more than 10 webhooks in a channel!"})
+                }
 
                 const webhooks = []
                 while(amount >= created) {
@@ -78,13 +84,19 @@ client.on("interactionCreate", async (interaction) => {
                 await interaction.editReply({content: `Created ${amount} webhooks!`})                                
             } else if(subcommand == "list") {
                 const existing = await interaction.client.db.webhooks.findOne({guildId: interaction.guild.id})
-                if(!existing.webhooks) return await interaction.reply({content: "No webhooks found!"})
+                if (!existing.webhooks) {
+                  return await interaction.reply({content: "No webhooks found!"})
+                }
                 await interaction.reply({content: `Found ${existing.webhooks.length} webhooks!`})
             } else if(subcommand == "delete") {
                 const amount = interaction.options.getInteger("amount")
                 const existing = await interaction.client.db.webhooks.findOne({guildId: interaction.guild.id})
-                if(!existing.webhooks) return await interaction.reply({content: "No webhooks found!"})
-                if(amount > existing.webhooks.length) return await interaction.reply({content: "Not enough webhooks found!"})
+                if (!existing.webhooks) {
+                  return await interaction.reply({content: "No webhooks found!"})
+                }
+                if (amount > existing.webhooks.length) {
+                  return await interaction.reply({content: "Not enough webhooks found!"})
+                }
                 existing.webhooks.splice(0, amount)
                 await interaction.client.db.webhooks.updateOne({guildId: interaction.guild.id}, {$set: {webhooks: existing.webhooks}})
                 await interaction.reply({content: `Deleted ${amount} webhooks!`})
@@ -163,7 +175,9 @@ const checkRatelimits = async (req, res, next) => {
 
 app.post("/channels/:channelId/messages", express.json(), checkRatelimits, async (req, res) => {
     const dbEntry = await app.db.webhooks.findOne({channelId: req.params.channelId})
-    if(!req.headers.authorization) return res.status(401).send("No authorization header provided!")
+    if (!req.headers.authorization) {
+      return res.status(401).send("No authorization header provided!")
+    }
     if(!app.users[req.headers.authorization]) {
         const userData = await got.get("https://discord.com/api/v9/users/@me", {
             headers: {
@@ -171,15 +185,19 @@ app.post("/channels/:channelId/messages", express.json(), checkRatelimits, async
             },
             throwHttpErrors: false
         }).json()
-        if(!userData) return res.status(401).send("Invalid authorization token provided!")
+        if (!userData) {
+          return res.status(401).send("Invalid authorization token provided!")
+        }
         app.users[req.headers.authorization] = userData
     }
 
     const user = app.users[req.headers.authorization]
     console.log(dbEntry)
-    if(!dbEntry || dbEntry.webhooks.size == 0) return res.status(404).json({
-        error: "No webhooks found for this channel!"
-    })
+    if (!dbEntry || dbEntry.webhooks.size == 0) {
+      return res.status(404).json({
+            error: "No webhooks found for this channel!"
+        })
+    }
     const manager = app.webhookManagers[req.params.channelId] || new WebhookManager(dbEntry.webhooks)
 
     if(manager == new WebhookManager(dbEntry.webhooks)) {
@@ -191,11 +209,13 @@ app.post("/channels/:channelId/messages", express.json(), checkRatelimits, async
 })
 
 app.get("/channels/:channelId/messages", checkRatelimits, async (req, res) => {
-    const after = req.query.after
+    const {after} = req.query
     const channel = client.channels.cache.get(req.params.channelId) || await client.channels.fetch(req.params.channelId)
-    if(!channel) return res.status(404).json({
-        error: "Channel not found!"
-    })
+    if (!channel) {
+      return res.status(404).json({
+            error: "Channel not found!"
+        })
+    }
     const messages = await channel.messages?.fetch({after})
     res.status(200).json(messages)
 })

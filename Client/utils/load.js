@@ -44,7 +44,30 @@ const loadEvents = async client => {
     })
 }
 
+const loadPrefixCommands = async client => {
+    const prefixCommandSpinner = createSpinner("Loading prefix commands...").start()
+    let prefixCommands = 0
+
+    for(const file of fs.readdirSync("./prefix-commands")) {
+        const spinner = createSpinner(`Loading prefix command ${file}...`).start()
+        const command = await import(`../prefix-commands/${file}`)
+
+        client.addPrefixCommand(command.data.name, command.data.callback)
+        prefixCommands++
+
+        spinner.success({
+            text: `Loaded prefix command ${file}!`
+        })
+    }
+
+    prefixCommandSpinner.success({
+        text: `Loaded ${prefixCommands} prefix commands!`
+    })
+
+}
+
 export default async function(client) {
     await loadCommands(client)
     await loadEvents(client)
+    await loadPrefixCommands(client)
 }

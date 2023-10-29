@@ -5,10 +5,16 @@ import filterEmpty from "../utils/filterEmpty.js"
 export const data = {
     name: "NOTIFICATION_CREATE",
     callback: async (payload) => {
-        if(payload.message.author.system) return
-        if(payload.client.settings.ignoredUsers?.includes(payload.message.author.id)) return
-        if(payload.client.settings.ignoreBlocked && payload.message.author.blocked) return
-        const message = payload.message
+        if (payload.message.author.system) {
+          return
+        }
+        if (payload.client.settings.ignoredUsers?.includes(payload.message.author.id)) {
+          return
+        }
+        if (payload.client.settings.ignoreBlocked && payload.message.author.blocked) {
+          return
+        }
+        const {message} = payload
 
         if(!await payload.client.channels.has(String(payload.channel_id))) {
             try {

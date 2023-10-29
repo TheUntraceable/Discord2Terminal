@@ -18,11 +18,15 @@ export const data = {
             }
 
             for(const [key, value] of Object.entries(flags)) {
-                if(!["ignoreUsers", "ignoreGuilds", "ignoreBlocked", "ignoreChannels", "compact"].includes(key)) continue
+                if (!["ignoreUsers", "ignoreGuilds", "ignoreBlocked", "ignoreChannels", "compact"].includes(key)) {
+                  continue
+                }
                 client.settings[key] = value
                 console.log(chalk.green(`${chalk.bold(key)}: ${value}`))
             }
-            fs.writeFile("./settings.json", JSON.stringify(client.settings, null, 4), err => {if(err) console.log(`Failed to write settings with error: ${err}`)})
+            fs.writeFile("./settings.json", JSON.stringify(client.settings, null, 4), err => {if (err) {
+                                                                                                console.log(`Failed to write settings with error: ${err}`)
+                                                                                              }})
         }
     }
 }

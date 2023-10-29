@@ -4,15 +4,23 @@ import parseMentions from '../utils/parseMentions.js';
 export const data = {
     name: "MESSAGE_CREATE",
     async callback(payload) {
-        if(payload.client.settings.ignoredUsers?.includes(payload.message.author.id)) return
-        if(payload.client.settings.ignoreBlocked && payload.message.author.blocked) return
-        if(payload.client.settings.ignoreBots) return
-        if(!payload.message.content) return
+        if (payload.client.settings.ignoredUsers?.includes(payload.message.author.id)) {
+          return
+        }
+        if (payload.client.settings.ignoreBlocked && payload.message.author.blocked) {
+          return
+        }
+        if (payload.client.settings.ignoreBots) {
+          return
+        }
+        if (!payload.message.content) {
+          return
+        }
 
         if(!payload.message.author) {
             console.log(payload.message)
             return
-        } 
+        }
 
         if(!payload.message.id) {
             console.log("Message ID not found, if this is frequent, reboot. If it persists, restart Discord.")
@@ -29,6 +37,7 @@ export const data = {
             })
         }
         
+
         payload.message.content.replace("\n", `\n  `)
         await payload.client.users.set(payload.message.author.id, {
             user: payload.message.author,
@@ -43,13 +52,13 @@ export const data = {
 
         if(payload.message.content.startsWith(payload.client.settings.prefix)) {
             const args = payload.message.content.slice(payload.client.settings.prefix.length).trim().split(/ +/g)
-            const command = args.shift().toLowerCase()
-            const cmd = payload.client.commands.get(command)
+            const command = args.shift()
+            const cmd = payload.client.prefixCommands[command]
             if(!cmd) {
                 console.error(`Command ${command} not found.`)
                 return
             }
-            await cmd.callback(payload.client, payload.message, args)
+            await cmd(payload.client, ...args)
         }
     }
 }

@@ -39,10 +39,16 @@ client.tags = client.db.table("tags")
 
 client.settings = settings
 client.commands = {}
+client.prefixCommands = {}
 client.rest = new REST({ version: "10" }).setToken(config.clientToken)
 
 client.addCommand = (name, callback) => {
     client.commands[name] = callback
+    return client
+}
+
+client.addPrefixCommand = (name, callback) => {
+    client.prefixCommands[name] = callback
     return client
 }
 
@@ -57,10 +63,8 @@ const loginOptions = {
     redirectUri: "https://discord.com"
 }
 
-if(client.settings.token) {
-    if(new Date(client.settings.token.expiresAt) > Date.now()) {
-        loginOptions.accessToken = client.settings.token.accessToken
-    }
+if (client.settings.token && new Date(client.settings.token.expiresAt) > Date.now()) {
+      loginOptions.accessToken = client.settings.token.accessToken
 }
 
 client.login(loginOptions).catch(async error => {

@@ -9,7 +9,9 @@ const parseCommands = async client => {
     })
 
     let string = answer.command
-    while(string[0] == " ") string = string.slice(1)
+    while (string[0] == " ") {
+        string = string.slice(1)
+    }
     const commandName = string.split(" ")[0]
     const args = string.split(" ").filter(arg => arg !== " ").splice(1, string.split(" ").length)
     const command = client.commands[commandName]

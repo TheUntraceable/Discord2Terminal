@@ -10,7 +10,10 @@ export const data = {
                 return
             }
             const tagData = await client.db.get(tag)
-            if(!tagData) console.error("That tag does not exist.")
+            if(!tagData) {
+                console.error("That tag does not exist.")
+                return
+            }
             await clipboard.write(tagData)
             console.log(`Copied tag ${tag} to clipboard.`)
             await clipboard.read()
@@ -44,9 +47,6 @@ export const data = {
             }
             await client.db.delete(tag)
             console.log(`Deleted tag ${tag}.`)
-        } else if(subcommand === "list") {
-            const tags = await client.db.keys()
-            console.log(tags.join(", "))
         } else {
             console.error("Please provide a valid subcommand.")
         }

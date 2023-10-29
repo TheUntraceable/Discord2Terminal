@@ -3,7 +3,9 @@ import chalk from "chalk"
 import { ChannelType } from "discord.js"
 
 export default async (client, guild, channelString = "", channelTypes = [ChannelType.GuildText, ChannelType.GuildVoice]) => {
-    if(!guild) return
+    if (!guild) {
+      return
+    }
     const channelNameToChannel = {}
     
     const channels = await client.getChannels(guild.id)

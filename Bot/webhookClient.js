@@ -55,9 +55,11 @@ export default class WebhookClient {
         if(response.status == 429) {
             console.log(chalk.red.underline.bold(`Webhook ${webhook.webhookId} is ratelimited! Adding it to the cooldown list...`))
             this.ratelimited.push(new RatelimitedWebhook(webhook.webhookId, webhook.webhookToken, response.data.retry_after))
-            if(this.shortest.expiresIn > response.data.retry_after) this.shortest = {
-                webhook: webhook,
-                expiresIn: response.data.retry_after
+            if (this.shortest.expiresIn > response.data.retry_after) {
+              this.shortest = {
+                            webhook: webhook,
+                            expiresIn: response.data.retry_after
+                        }
             }
             setTimeout(() => {
                 console.log(chalk.yellow.underline(`Webhook ${webhook.webhookId} is no longer ratelimited!`))

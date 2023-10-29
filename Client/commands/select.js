@@ -9,24 +9,38 @@ export const data = {
     async callback(client, guildString = "", channelString = "") {
 
         const guild = await getGuildFromName(client, guildString)
-        if(!guild) return
+        if (!guild) {
+          return
+        }
         const channel = await getChannelFromName(client, guild, channelString, [ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.GuildVoice])
-        if(!channel) return
+        if (!channel) {
+          return
+        }
 
         let message = ""
         let lastAuthor = null
         const selectedChannel = await client.channels.get(channel.id)
 
-        if(!selectedChannel) return
+        if (!selectedChannel) {
+          return
+        }
         for(const cachedMessage of selectedChannel.created.sort((a, b) => a?.id - b?.id)) {
-            if(!cachedMessage) continue
-            if(!cachedMessage.author) continue
-            if(client.settings.ignoreBlocked && cachedMessage.author.blocked) continue
-            if(client.settings.ignoreUsers?.includes(cachedMessage.author.id)) continue
+            if (!cachedMessage) {
+              continue
+            }
+            if (!cachedMessage.author) {
+              continue
+            }
+            if (client.settings.ignoreBlocked && cachedMessage.author.blocked) {
+              continue
+            }
+            if (client.settings.ignoreUsers?.includes(cachedMessage.author.id)) {
+              continue
+            }
             let messageBlock = ""
 
             if(lastAuthor != cachedMessage.author?.id) {
-                messageBlock += chalk.hex(cachedMessage.author_color || "#FFFFFF11").underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})\n`)
+                messageBlock += chalk.hex(cachedMessage.author_color || "#979c9f").underline(`${cachedMessage.author.username}#${cachedMessage.author.discriminator} (${cachedMessage.author.id})\n`)
                 lastAuthor = cachedMessage.author.id
             }
 

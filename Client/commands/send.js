@@ -9,9 +9,13 @@ export const data = {
     name: "send",
     async callback(client, guildString, channelString) {
         const guild = await getGuildFromName(client, guildString)
-        if(!guild) return
+        if (!guild) {
+          return
+        }
         const channel = await getChannelFromName(client, guild, channelString, [ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.PublicThread])
-        if(!channel) return
+        if (!channel) {
+          return
+        }
         const message = await inquirer.prompt({
             type: "input",
             name: "content",

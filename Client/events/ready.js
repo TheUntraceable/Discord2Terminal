@@ -39,7 +39,9 @@ export const data = {
         let subscribed = 0
 
         for(const channel of channels.filter(channel => [ChannelType.GuildVoice, ChannelType.GuildText].includes(channel.type))) {
-            if(payload.client.settings.ignoredChannels?.includes(channel.id)) continue
+            if (payload.client.settings.ignoredChannels?.includes(channel.id)) {
+              continue
+            }
             try {
                 await payload.client.subscribe("MESSAGE_CREATE", { channel_id: channel.id }),
                 await payload.client.subscribe("MESSAGE_UPDATE", { channel_id: channel.id }),
