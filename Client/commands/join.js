@@ -14,12 +14,12 @@ export const data = {
           return
         }
         try {
-            await client.selectVoiceChannel(selectedChannel.id, {
+            await client.selectVoiceChannel(channel.id, {
                 force: true
             })
-            console.log(chalk.green(`Successfully joined ${channel.channel}`))
+            console.log(chalk.green(`Successfully joined ${channel.name}`))
         } catch(error) {
-            console.log(chalk.red(`Failed to join ${channel.channel}`))
+            console.log(chalk.red(`Failed to join ${channel.name}`))
             return
         }
     }
