@@ -20,8 +20,9 @@ export default async (client, guild, channelString = "", channelTypes = [Channel
 
         channelNameToChannel[channel.name] = channel
     }
+    const filteredChannels = channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase()) && !client.settings.ignoredChannels?.includes(channel.id) && channelTypes.includes(channel.type))
 
-    if((channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase()) && !client.settings.ignoredChannels?.includes(channel.id) && channelTypes.includes(channel.type)).map(channel => channel.name)).length == 0) {
+    if(filteredChannels.length == 0) {
         console.log(chalk.red("Invalid channel!"))
         return
     }
@@ -31,7 +32,7 @@ export default async (client, guild, channelString = "", channelTypes = [Channel
         type: "list",
         name: "channel",
         message: "Select a channel",
-        choices: channels.filter(channel => channel.name.toLowerCase().includes(channelString.toLowerCase()) && !client.settings.ignoredChannels?.includes(channel.id)).map(channel => channel.name)
+        choices: filteredChannels
     })
 
     if(!channelNameToChannel[channel.channel]) {
